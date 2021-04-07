@@ -20,6 +20,7 @@
         android:id="@+id/add_item_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="addItemBtnClicked"
         android:text="@string/add_to_list_btn" />
 
     <ScrollView
