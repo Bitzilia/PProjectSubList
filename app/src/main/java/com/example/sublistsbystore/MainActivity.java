@@ -7,6 +7,7 @@ import android.util.TypedValue;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private List<String> shopInput = new ArrayList<>();
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,49 +36,53 @@ public class MainActivity extends AppCompatActivity {
         shopInput.add("oil");
 
 
-
         fillInventory();
         prepare1();
         prepare2();
         buildList();
     }
 
-    private void fillInventory(){
-        shawsInventory.put("milk",3.99 );
-        shawsInventory.put("eggs",3.99 );
+    private void fillInventory() {
+        shawsInventory.put("milk", 3.99);
+        shawsInventory.put("eggs", 3.99);
         shawsInventory.put("bread", 3.99);
         shawsInventory.put("berry", 1.99);
 
 
         priceChopperInventory.put("milk", 4.99);
-        priceChopperInventory.put("eggs",3.99 );
+        priceChopperInventory.put("eggs", 3.99);
         priceChopperInventory.put("bread", 2.99);
         priceChopperInventory.put("rice", 2.99);
 
 
-
-        costcoInventory.put( "milk",5.99);
-        costcoInventory.put("eggs",1.99 );
-        costcoInventory.put("oil",3.99 );
-        costcoInventory.put("rice",3.99 );
+        costcoInventory.put("milk", 5.99);
+        costcoInventory.put("eggs", 1.99);
+        costcoInventory.put("oil", 3.99);
+        costcoInventory.put("rice", 3.99);
 
 
     }
 
     //making subLists per store with customer's requests
-    private void prepare1(){
+    private void prepare1() {
 
         for (int i = 0; i < shopInput.size(); i++) {
             String tmp = shopInput.get(i);
-            if(shawsInventory.containsKey(tmp)){ shawsRequest.put(tmp,shawsInventory.get(tmp));}
-            if(priceChopperInventory.containsKey(tmp)){ priceChopperRequest.put(tmp,priceChopperInventory.get(tmp));}
-            if(costcoInventory.containsKey(tmp)){ costcoRequest.put(tmp,costcoInventory.get(tmp));}
+            if (shawsInventory.containsKey(tmp)) {
+                shawsRequest.put(tmp, shawsInventory.get(tmp));
+            }
+            if (priceChopperInventory.containsKey(tmp)) {
+                priceChopperRequest.put(tmp, priceChopperInventory.get(tmp));
+            }
+            if (costcoInventory.containsKey(tmp)) {
+                costcoRequest.put(tmp, costcoInventory.get(tmp));
+            }
         }
     }
 
 
     //finding/creating cheapest shopping list
-    private void prepare2(){
+    private void prepare2() {
 
         for (int i = 0; i < shopInput.size(); i++) {
 
@@ -89,42 +91,48 @@ public class MainActivity extends AppCompatActivity {
             Double chopper = null;
             Double costco = null;
 
-            if (shawsRequest.containsKey(tmp)) {shaws=shawsRequest.get(tmp);}
-            if (priceChopperRequest.containsKey(tmp)) {chopper=priceChopperRequest.get(tmp);}
-            if (costcoRequest.containsKey(tmp)) {costco=costcoRequest.get(tmp);}
+            if (shawsRequest.containsKey(tmp)) {
+                shaws = shawsRequest.get(tmp);
+            }
+            if (priceChopperRequest.containsKey(tmp)) {
+                chopper = priceChopperRequest.get(tmp);
+            }
+            if (costcoRequest.containsKey(tmp)) {
+                costco = costcoRequest.get(tmp);
+            }
 
-            if(shaws!=null && chopper!=null && costco!=null){
-                if (shaws<=chopper){
+            if (shaws != null && chopper != null && costco != null) {
+                if (shaws <= chopper) {
                     priceChopperRequest.remove(tmp);
-                    if(shaws<=costco){
+                    if (shaws <= costco) {
                         costcoRequest.remove(tmp);
-                    }else{
+                    } else {
                         shawsRequest.remove(tmp);
                     }
-                }else{
+                } else {
                     shawsRequest.remove(tmp);
-                    if(chopper<=costco){
+                    if (chopper <= costco) {
                         costcoRequest.remove(tmp);
-                    }else{
+                    } else {
                         priceChopperRequest.remove(tmp);
                     }
                 }
-            }else if(shaws!=null && chopper!=null && costco==null){
-                if (shaws<=chopper) {
+            } else if (shaws != null && chopper != null && costco == null) {
+                if (shaws <= chopper) {
                     priceChopperRequest.remove(tmp);
-                }else{
+                } else {
                     shawsRequest.remove(tmp);
                 }
-            }else if(shaws!=null && chopper==null && costco!=null){
-                if (shaws<=costco) {
+            } else if (shaws != null && chopper == null && costco != null) {
+                if (shaws <= costco) {
                     costcoRequest.remove(tmp);
-                }else{
+                } else {
                     shawsRequest.remove(tmp);
                 }
-            }else if(shaws==null && chopper!=null && costco!=null){
-                if (chopper<=costco) {
+            } else if (shaws == null && chopper != null && costco != null) {
+                if (chopper <= costco) {
                     costcoRequest.remove(tmp);
-                }else{
+                } else {
                     priceChopperRequest.remove(tmp);
                 }
             }
@@ -132,43 +140,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void buildList(){
+    private void buildList() {
 
         TableLayout table = findViewById(R.id.table);
         table.removeAllViews();
 
-        if (!shawsRequest.isEmpty()){
-            subList(shawsRequest, table,"Shaws Items:" );
+        if (!shawsRequest.isEmpty()) {
+            subList(shawsRequest, table, "Shaws Items:");
             //need to create new line in layout
         }
-        if (!priceChopperRequest.isEmpty()){
-            subList(priceChopperRequest, table,"Price Chopper Items:" );
+        if (!priceChopperRequest.isEmpty()) {
+            subList(priceChopperRequest, table, "Price Chopper Items:");
             //need to create new line in layout
         }
-        if (!costcoRequest.isEmpty()){
-            subList(costcoRequest, table,"Costco Items:" );
+        if (!costcoRequest.isEmpty()) {
+            subList(costcoRequest, table, "Costco Items:");
         }
     }
 
-    private TextView makeTV(String word){
+    private TextView makeTV(String word) {
 
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
-        view.setPadding(0,0,getResources().getDimensionPixelSize(R.dimen.table_padding),0);
+        view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size));
 
         return view;
     }
 
-    private void subList(HashMap<String,Double> sub, TableLayout tab, String str){
+    private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
         TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
-        for(Map.Entry<String,Double > entry : sub.entrySet()) {
+        for (Map.Entry<String, Double> entry : sub.entrySet()) {
             String key = entry.getKey();
             Double value = entry.getValue();
             TableRow row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("Item: "+key+"  -  Price: "+value));
+            row.addView(makeTV("Item: " + key + "  -  Price: " + value));
             tab.addView(row);
         }
     }
