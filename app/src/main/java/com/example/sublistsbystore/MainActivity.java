@@ -2,8 +2,10 @@ package com.example.sublistsbystore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -61,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
         costcoInventory.put("rice", 3.99);
 
 
+    }
+
+    /**
+     * button to nav to next page
+     * @param view
+     */
+    public void buttonOver(View view){
+        startActivity(new Intent(getApplicationContext(), SelectItems.class));
     }
 
     //making subLists per store with customer's requests

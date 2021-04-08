@@ -15,6 +15,13 @@
         android:text="@string/text"
         android:textSize="@dimen/size" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="buttonOver"
+        android:text="Next Page" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

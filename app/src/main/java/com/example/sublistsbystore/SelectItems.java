@@ -5,28 +5,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 
 public class SelectItems extends AppCompatActivity {
+
+    private List<Item> itemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_items);
 
-        buildTable();
+        buildItemTable();
     }
 
     /**
      * creates list of items and adds items to array
      * @param item
      */
-    public void buildList(String item) {
-        //    TODO: add functionality
+    public void addItem(String item) {
+        Item i = new Item();
+        i.itemName = item;
+        itemList.add(i);
     }
 
     /**
@@ -39,7 +50,17 @@ public class SelectItems extends AppCompatActivity {
         if (input.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Field cannot be empty!", Toast.LENGTH_SHORT).show();
         } else {
-//            TODO: finish build table
+
+            addItem(input.getText().toString());
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            input.setText("");
+            input.setEnabled(true);
+            buildItemTable();
+
+            Toast.makeText( getApplicationContext(), R.string.successful_add, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -53,28 +74,55 @@ public class SelectItems extends AppCompatActivity {
      * @param view
      */
     public void clearListBtn(View view) {
-        //    TODO: add clear list button
+        Iterator<Item> i = itemList.iterator();
+        while (i.hasNext()){
+            i.next();
+            i.remove();
+        }
+        buildItemTable();
     }
 
     /**
      * refreshes list of items in display
      */
-    public void buildTable() {
-        //      TODO: finish makeDeleteItemButton()
+    public void buildItemTable() {
+        TableLayout table = findViewById(R.id.current_items_table);
+        table.removeAllViews(); // clear existing items
+
+//      for each item on list, create a delete button and add textView
+        for (Item item : itemList) {
+            TableRow row = new TableRow(this.getApplicationContext());
+            row.addView(makeDeleteItemButton(item));
+            row.addView(makeTV(item.itemName));
+            table.addView(row);
+        }
+
     }
 
     /**
      * adds delete button to each item on list
      * @return
      */
-    private Button makeDeleteItemButton() {
-        //    TODO: add  delete button -- individual items, identify how we are going to store 'list of items'
-        return null;
+    private Button makeDeleteItemButton(Item item) {
+        Button dltButton = new Button(this.getApplicationContext());
+        dltButton.setText("Remove");
+        dltButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemList.remove(item);
+                buildItemTable();
+            }
+        });
+        return dltButton;
     }
 
     private TextView makeTV(String item) {
-        //    TODO: set resource file for text size and padding
-        return null;
+        //    TODO: set resources for text size and padding
+        TextView listView = new TextView(this.getApplicationContext());
+        listView.setText(item);
+        listView.setTextSize(16);
+        listView.setPadding(1, 0, 0, 0);
+        return listView;
     }
 
 
