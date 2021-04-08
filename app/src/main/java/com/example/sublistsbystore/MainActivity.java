@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         prepare1();
         prepare2();
         buildList();
+
     }
 
     private void fillInventory() {
