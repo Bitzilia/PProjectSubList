@@ -25,6 +25,22 @@
         android:paddingBottom="8dp"
         android:text="@string/add_to_list_btn" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="542dp">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/current_items_table"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp" />
+        </HorizontalScrollView>
+    </ScrollView>
+
     <Button
         android:id="@+id/clear_all_btn"
         android:layout_width="match_parent"
@@ -40,21 +56,5 @@
         android:onClick="nextPageButton"
         android:paddingBottom="8dp"
         android:text="Next Page" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TableLayout
-                android:id="@+id/current_items_table"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="10dp" />
-        </HorizontalScrollView>
-    </ScrollView>
 
 </LinearLayout>
