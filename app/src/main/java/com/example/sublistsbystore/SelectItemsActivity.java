@@ -2,6 +2,8 @@ package com.example.sublistsbystore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -116,11 +118,27 @@ public class SelectItemsActivity extends AppCompatActivity {
         dltButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemList.remove(item);
-                buildItemTable();
+                promptDeleteItem(item);
             }
         });
         return dltButton;
+    }
+
+    private void promptDeleteItem(Item item) {
+        // credit: https://stackoverflow.com/a/5127506
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm")
+                .setMessage("Do you really want to remove \"" + item.getName() + "\"?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        itemList.remove(item);
+                        buildItemTable();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     private TextView makeTV(String item) {
