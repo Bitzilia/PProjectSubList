@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
      * button to nav to next page
      * @param view
      */
-    public void buttonOver(View view){
-        startActivity(new Intent(getApplicationContext(), SelectItems.class));
+    public void buttonOver(View view) {
+        startActivity(new Intent(getApplicationContext(), SelectItemsActivity.class));
     }
 
     //making subLists per store with customer's requests

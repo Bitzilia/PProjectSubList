@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.material.slider.Slider;
 
-public class StoresAndSavings extends AppCompatActivity {
+public class StoresAndSavingsActivity extends AppCompatActivity {
 
     TextView costEstimate;
     TextView numStores;
@@ -20,7 +20,7 @@ public class StoresAndSavings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_stores_and_savings);
         costEstimate = findViewById(R.id.CostEstimateView);
         numStores = findViewById(R.id.numStoresText);
         slide = findViewById(R.id.numStoresSeekBar);

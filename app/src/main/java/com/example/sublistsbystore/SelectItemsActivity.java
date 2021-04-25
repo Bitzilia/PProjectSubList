@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class SelectItems extends AppCompatActivity {
+public class SelectItemsActivity extends AppCompatActivity {
 
     private List<Item> itemList = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class SelectItems extends AppCompatActivity {
 
     public void nextPageButton(View view) {
         //FIXME: replace class name for 'how many stops' page --
-        startActivity(new Intent(getApplicationContext(), StoresAndSavings.class));
+        startActivity(new Intent(getApplicationContext(), StoresAndSavingsActivity.class));
     }
 
     /**
