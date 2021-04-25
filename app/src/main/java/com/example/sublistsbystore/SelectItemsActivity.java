@@ -25,7 +25,8 @@ import java.util.List;
 
 public class SelectItemsActivity extends AppCompatActivity {
 
-    private List<Item> itemList = new ArrayList<>();
+    private GroceryList itemList = new GroceryList();
+    //    private List<Item> itemList = new ArrayList<>();
     float scale;
 
     @Override
@@ -43,7 +44,7 @@ public class SelectItemsActivity extends AppCompatActivity {
     public void addItem(String name) {
         Item i = new Item();
         i.setName(name);
-        itemList.add(i);
+        itemList.addItem(i);
     }
 
     /**
@@ -80,12 +81,20 @@ public class SelectItemsActivity extends AppCompatActivity {
      * @param view
      */
     public void clearListBtn(View view) {
-        Iterator<Item> i = itemList.iterator();
-        while (i.hasNext()) {
-            i.next();
-            i.remove();
-        }
-        buildItemTable();
+        // credit: https://stackoverflow.com/a/5127506
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm")
+                .setMessage("Do you really want to clear this list?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        itemList.clear();
+                        buildItemTable();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     /**
@@ -98,7 +107,7 @@ public class SelectItemsActivity extends AppCompatActivity {
         table.removeAllViews(); // clear existing items
 
 //      for each item on list, create a delete button and add textView
-        for (Item item : itemList) {
+        for (Item item : itemList.getItems()) {
             TableRow row = new TableRow(this.getApplicationContext());
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
@@ -134,7 +143,7 @@ public class SelectItemsActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                        itemList.remove(item);
+                        itemList.removeItem(item);
                         buildItemTable();
                     }
                 })
