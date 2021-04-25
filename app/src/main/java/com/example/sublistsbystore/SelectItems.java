@@ -32,11 +32,11 @@ public class SelectItems extends AppCompatActivity {
 
     /**
      * creates list of items and adds items to array
-     * @param item
+     * @param name
      */
-    public void addItem(String item) {
+    public void addItem(String name) {
         Item i = new Item();
-        i.itemName = item;
+        i.setName(name);
         itemList.add(i);
     }
 
@@ -60,13 +60,13 @@ public class SelectItems extends AppCompatActivity {
             input.setEnabled(true);
             buildItemTable();
 
-            Toast.makeText( getApplicationContext(), R.string.successful_add, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.successful_add, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void nextPageButton(View view) {
         //FIXME: replace class name for 'how many stops' page --
-        startActivity(new Intent(getApplicationContext(), null));
+        startActivity(new Intent(getApplicationContext(), StoresAndSavings.class));
     }
 
     /**
@@ -75,7 +75,7 @@ public class SelectItems extends AppCompatActivity {
      */
     public void clearListBtn(View view) {
         Iterator<Item> i = itemList.iterator();
-        while (i.hasNext()){
+        while (i.hasNext()) {
             i.next();
             i.remove();
         }
@@ -93,7 +93,7 @@ public class SelectItems extends AppCompatActivity {
         for (Item item : itemList) {
             TableRow row = new TableRow(this.getApplicationContext());
             row.addView(makeDeleteItemButton(item));
-            row.addView(makeTV(item.itemName));
+            row.addView(makeTV(item.getName()));
             table.addView(row);
         }
 
