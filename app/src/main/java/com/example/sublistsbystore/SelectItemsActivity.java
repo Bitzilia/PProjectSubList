@@ -7,25 +7,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 
 public class SelectItemsActivity extends AppCompatActivity {
 
-    private GroceryList itemList = new GroceryList();
+    private Grocery itemList = new Grocery();
     //    private List<Item> itemList = new ArrayList<>();
     float scale;
 

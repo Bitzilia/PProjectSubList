@@ -5,5 +5,5 @@ import java.util.Map;
 
 public class SeparatedList {
     // TODO - this may need to be populated by a SQL query (see http://marker.to/NzQYfH)
-    private Map<Store, ArrayList<ItemInventory>> itemsByStore;
+    private Map<Store, ArrayList<RetailItem>> itemsByStore;
 }

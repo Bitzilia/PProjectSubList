@@ -1,17 +1,15 @@
 package com.example.sublistsbystore;
 
-import java.util.ArrayList;
-
 public class ListSplitter {
     /** The list of items **/
-    private GroceryList groceryList;
+    private Grocery groceryList;
     private int numStores;
 
-    public void setGroceryList(GroceryList groceryList) {
+    public void setGroceryList(Grocery groceryList) {
         this.groceryList = groceryList;
     }
 
-    public GroceryList getGroceryList() {
+    public Grocery getGroceryList() {
         return this.groceryList;
     }
 
