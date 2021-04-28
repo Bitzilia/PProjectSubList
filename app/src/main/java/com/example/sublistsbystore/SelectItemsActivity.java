@@ -1,6 +1,7 @@
 package com.example.sublistsbystore;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,16 +17,25 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 
 public class SelectItemsActivity extends AppCompatActivity {
-
-    private Grocery itemList = new Grocery();
+    private AppDatabase appDatabase;
+    private GroceryListDAO groceryListDAO;
     //    private List<Item> itemList = new ArrayList<>();
     float scale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        appDatabase = Room.databaseBuilder(this.getApplicationContext(), AppDatabase.class, "shoparound.db").build();
+        appDatabase = Room.inMemoryDatabaseBuilder(this.getApplicationContext(), AppDatabase.class).allowMainThreadQueries().build();
+        GroceryListDAO dao = appDatabase.groceryListDAO();
+        this.groceryListDAO = dao;
+//        dao.insertItem(new Item("TEST ME"));
+
+
         setContentView(R.layout.activity_select_items);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         buildItemTable();
@@ -38,7 +48,7 @@ public class SelectItemsActivity extends AppCompatActivity {
     public void addItem(String name) {
         Item i = new Item();
         i.setName(name);
-        itemList.addItem(i);
+        groceryListDAO.insertItem(i);
     }
 
     /**
@@ -83,8 +93,8 @@ public class SelectItemsActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-
-                        itemList.clear();
+                        List<Item> itemsToDelete = groceryListDAO.getItems();
+                        itemsToDelete.forEach(item -> groceryListDAO.deleteItems(item));
                         buildItemTable();
                     }
                 })
@@ -101,7 +111,7 @@ public class SelectItemsActivity extends AppCompatActivity {
         table.removeAllViews(); // clear existing items
 
 //      for each item on list, create a delete button and add textView
-        for (Item item : itemList.getItems()) {
+        for (Item item : groceryListDAO.getItems()) {
             TableRow row = new TableRow(this.getApplicationContext());
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
@@ -137,7 +147,7 @@ public class SelectItemsActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                        itemList.removeItem(item);
+                        groceryListDAO.deleteItems(item);
                         buildItemTable();
                     }
                 })
@@ -164,6 +174,7 @@ public class SelectItemsActivity extends AppCompatActivity {
         inc.setText("+");
         inc.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
+            this.groceryListDAO.updateItem(item);
             np.setText(item.getQuantity() + "");
         });
         Button dec = new Button(this.getApplicationContext());
@@ -172,6 +183,7 @@ public class SelectItemsActivity extends AppCompatActivity {
             if (item.getQuantity() > 1) {
 
                 item.setQuantity(item.getQuantity() - 1);
+                this.groceryListDAO.updateItem(item);
                 np.setText(item.getQuantity() + "");
             }
         });
