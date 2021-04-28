@@ -27,7 +27,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="542dp">
+        android:layout_height="529dp">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -46,15 +46,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="clearListBtn"
-        android:paddingBottom="8dp"
         android:text="@string/clear_list_button_text" />
 
     <Button
         android:id="@+id/next_page_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:onClick="nextPageButton"
-        android:paddingBottom="8dp"
         android:text="Next Page" />
 
 </LinearLayout>

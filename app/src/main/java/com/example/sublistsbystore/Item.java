@@ -10,16 +10,20 @@ import androidx.room.PrimaryKey;
  */
 @Entity
 public class Item {
-    @PrimaryKey
-    private int uid;
-    private String name;
-    private int quantity = 1;
+    @PrimaryKey(autoGenerate = true)
+    public int uid;
+    public String name;
+    public int quantity = 1;
 
     public Item() {
     }
 
     public Item(int uid) {
         this.uid = uid;
+    }
+
+    public Item(String name) {
+        this.name = name;
     }
 
     public Item(int uid, String name) {
@@ -31,6 +35,14 @@ public class Item {
         this.uid = uid;
         this.setName(name);
         this.setQuantity(quantity);
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public int getUid() {
+        return uid;
     }
 
     public String getName() {
