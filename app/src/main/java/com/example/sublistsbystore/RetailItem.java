@@ -1,9 +1,8 @@
 package com.example.sublistsbystore;
 
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 
-@Entity
+@Entity(primaryKeys = {"itemID", "storeID"})
 public class RetailItem {
     public double price;
     public int itemID;

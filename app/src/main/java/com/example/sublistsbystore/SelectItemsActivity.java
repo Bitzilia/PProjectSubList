@@ -21,7 +21,7 @@ import java.util.List;
 
 
 public class SelectItemsActivity extends AppCompatActivity {
-    private AppDatabase appDatabase;
+    private ShoparoundDB appDatabase;
     private GroceryListDAO groceryListDAO;
     //    private List<Item> itemList = new ArrayList<>();
     float scale;
@@ -30,7 +30,7 @@ public class SelectItemsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        appDatabase = Room.databaseBuilder(this.getApplicationContext(), AppDatabase.class, "shoparound.db").build();
-        appDatabase = Room.inMemoryDatabaseBuilder(this.getApplicationContext(), AppDatabase.class).allowMainThreadQueries().build();
+        appDatabase = Room.inMemoryDatabaseBuilder(this.getApplicationContext(), ShoparoundDB.class).allowMainThreadQueries().build();
         GroceryListDAO dao = appDatabase.groceryListDAO();
         this.groceryListDAO = dao;
 //        dao.insertItem(new Item("TEST ME"));
