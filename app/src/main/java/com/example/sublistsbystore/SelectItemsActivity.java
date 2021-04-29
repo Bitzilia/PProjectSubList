@@ -1,23 +1,29 @@
 package com.example.sublistsbystore;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import java.util.List;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 
 public class SelectItemsActivity extends AppCompatActivity {
@@ -33,9 +39,6 @@ public class SelectItemsActivity extends AppCompatActivity {
         appDatabase = Room.inMemoryDatabaseBuilder(this.getApplicationContext(), ShoparoundDB.class).allowMainThreadQueries().build();
         GroceryListDAO dao = appDatabase.groceryListDAO();
         this.groceryListDAO = dao;
-//        dao.insertItem(new Item("TEST ME"));
-
-
         setContentView(R.layout.activity_select_items);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         buildItemTable();
@@ -107,12 +110,15 @@ public class SelectItemsActivity extends AppCompatActivity {
     public void buildItemTable() {
         TableLayout table = findViewById(R.id.current_items_table);
 
-        table.setStretchAllColumns(true);
+        // set the label column to stretch
+        // credit: https://stackoverflow.com/questions/1666685/android-stretch-columns-evenly-in-a-tablelayout
+        table.setColumnStretchable(2, true);
         table.removeAllViews(); // clear existing items
 
 //      for each item on list, create a delete button and add textView
         for (Item item : groceryListDAO.getItems()) {
             TableRow row = new TableRow(this.getApplicationContext());
+            row.setGravity(Gravity.CENTER);
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
             row.addView(makeTV(item.getName()));
@@ -125,9 +131,14 @@ public class SelectItemsActivity extends AppCompatActivity {
      * adds delete button to each item on list
      * @return
      */
-    private Button makeDeleteItemButton(Item item) {
-        Button dltButton = new Button(this.getApplicationContext());
-        dltButton.setText("Remove");
+    private ImageButton makeDeleteItemButton(Item item) {
+        ImageButton dltButton = new ImageButton(this.getApplicationContext());
+        dltButton.setForegroundGravity(Gravity.CENTER);
+        dltButton.setBackgroundColor(Color.TRANSPARENT);
+        dltButton.setPadding(0, 0, (int) (5 * scale + 0.5f), 0);
+        dltButton.setMinimumHeight(MATCH_PARENT);
+        Drawable deleteImage = getApplicationContext().getResources().getDrawable(R.drawable.ic_baseline_delete_24);
+        dltButton.setImageDrawable(deleteImage);
         dltButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,8 +176,6 @@ public class SelectItemsActivity extends AppCompatActivity {
 
     private LinearLayout makeQuantityInput(Item item) {
         LinearLayout container = new LinearLayout(this.getApplicationContext());
-//        container.setOrientation(LinearLayout.VERTICAL);
-
         TextView np = new TextView(this.getApplicationContext());
         np.setText(item.getQuantity() + "");
 
@@ -188,25 +197,28 @@ public class SelectItemsActivity extends AppCompatActivity {
             }
         });
 
+        container.setPadding(0, 0, 0, 0);
 
-        container.addView(dec);
-        container.addView(np);
-        container.addView(inc);
-
-
+        // calculate pixels from dps
         // credit: https://stackoverflow.com/a/5255256
-        int pixels = (int) (41 * scale + 0.5f);
-
-        // TODO how to make increment/decrement/remove buttons narrower programmatically
-        // TODO or is there a better way to be building each row? (TableRow as Fragment? Separate Class?)
+        int pixels = (int) (30 * scale + 0.5f);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(pixels, pixels);
-        params.weight = 0.5f;
+        params.height = MATCH_PARENT;
+        container.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        params.setMargins(0, 0, 0, 0);
+
+        np.setWidth(pixels);
+        np.setGravity(Gravity.CENTER);
+        inc.setPadding(0, 0, 0, 0);
+        dec.setPadding(0, 0, 0, 0);
+
+        container.addView(dec, params);
+        container.addView(np, params);
+        container.addView(inc, params);
         inc.setMaxWidth(pixels);
-        inc.setWidth(pixels);
-        inc.setLayoutParams(params);
         dec.setMaxWidth(pixels);
+        inc.setWidth(pixels);
         dec.setWidth(pixels);
-        dec.setLayoutParams(params);
 
         return container;
     }
