@@ -2,6 +2,7 @@ package com.example.sublistsbystore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
 import android.view.View;
@@ -25,5 +26,10 @@ public class StoresAndSavingsActivity extends AppCompatActivity {
         numStores = findViewById(R.id.numStoresText);
         slide = findViewById(R.id.numStoresSeekBar);
         storesNum = slide.getProgress();
+    }
+
+    public void nextPageButton(View view) {
+        //FIXME: replace class name for 'how many stops' page --
+        startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
 }
