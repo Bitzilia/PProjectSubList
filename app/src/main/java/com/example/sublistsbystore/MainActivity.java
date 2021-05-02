@@ -61,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
      * @param name
      */
     public void addItem(String name) {
-        RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(),1);
-        requestedItemDAO.addRequestedItem(i);
+        if (itemDAO.get(name)==null) itemDAO.insertItem(new Item(name));
+        else {RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(),1);
+        requestedItemDAO.addRequestedItem(i);}
     }
 
     /**

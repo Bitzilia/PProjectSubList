@@ -1,22 +1,21 @@
 package com.example.sublistsbystore;
 
+import com.example.sublistsbystore.requestedItem.RequestedItem;
+import com.example.sublistsbystore.retailitem.RetailItem;
+
 public class ListSplitter {
     /** The list of items **/
-    private Grocery groceryList;
+    private RequestedItem groceryList;
     private int numStores;
 
-    public void setGroceryList(Grocery groceryList) {
+    public void setGroceryList(RequestedItem groceryList) {
         this.groceryList = groceryList;
     }
 
-    public Grocery getGroceryList() {
+    public RequestedItem getGroceryList() {
         return this.groceryList;
     }
 
-    /** gets the list of groceries separated by store **/
-    public SeparatedList getSeparatedList() {
-        return null;
-    }
 
     public int getNumStores() {
         return 0;
@@ -26,7 +25,7 @@ public class ListSplitter {
         this.numStores = numStores;
     }
 
-    private double itemPriceCompare(Item item) {
+    private double itemPriceCompare(RetailItem item) {
         return 0;
     }
 
