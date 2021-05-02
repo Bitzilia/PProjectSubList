@@ -31,8 +31,8 @@ public interface shoparoundDAO {
 
     //get matching items
     //TODO get this join working
-    @Query("Select * from RetailItem where RetailItem.itemID = Grocery.itemID")
-    void getMatch(Grocery grocery);
+//    @Query("Select * from RetailItem where RetailItem.itemID = Grocery.itemID")
+//    void getMatch(Grocery grocery);
 
 
 }
