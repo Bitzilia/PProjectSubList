@@ -21,24 +21,35 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.example.sublistsbystore.item.Item;
+import com.example.sublistsbystore.item.ItemDAO;
+import com.example.sublistsbystore.requestedItem.RequestedItem;
+import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
+import com.example.sublistsbystore.retailitem.RetailItemDAO;
+import com.example.sublistsbystore.store.StoreDAO;
+
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 
 public class MainActivity extends AppCompatActivity {
-    private ShoparoundDB appDatabase;
-    private GroceryListDAO groceryListDAO;
+    RequestedItemDAO requestedItemDAO;
+    ItemDAO itemDAO;
+    StoreDAO storeDAO;
+    RetailItemDAO retailItemDAO;
+    ShoparoundDB db;
     //    private List<Item> itemList = new ArrayList<>();
     float scale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        appDatabase = Room.databaseBuilder(this.getApplicationContext(), AppDatabase.class, "shoparound.db").build();
-        appDatabase = Room.inMemoryDatabaseBuilder(this.getApplicationContext(), ShoparoundDB.class).allowMainThreadQueries().build();
-        GroceryListDAO dao = appDatabase.groceryListDAO();
-        this.groceryListDAO = dao;
+        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class,"shoparound.db")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        requestedItemDAO = db.requestedItemDAO();
         setContentView(R.layout.activity_main);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         addItem("test1");
@@ -50,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
      * @param name
      */
     public void addItem(String name) {
-        Item i = new Item();
-        i.setName(name);
-        groceryListDAO.insertItem(i);
+        if (itemDAO.get(name)==null) itemDAO.insertItem(new Item(name));
+        else {RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(),1);
+        requestedItemDAO.addRequestedItem(i);}
     }
 
     /**
@@ -97,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        List<Item> itemsToDelete = groceryListDAO.getItems();
-                        itemsToDelete.forEach(item -> groceryListDAO.deleteItems(item));
+                        List<RequestedItem> itemsToDelete = requestedItemDAO.getAllRequestedItems();
+                        itemsToDelete.forEach(item -> requestedItemDAO.removeRequestedItem(item));
                         buildItemTable();
                     }
                 })
@@ -117,12 +128,12 @@ public class MainActivity extends AppCompatActivity {
         table.removeAllViews(); // clear existing items
 
 //      for each item on list, create a delete button and add textView
-        for (Item item : groceryListDAO.getItems()) {
+        for (RequestedItem item: requestedItemDAO.getAllRequestedItems()) {
             TableRow row = new TableRow(this.getApplicationContext());
             row.setGravity(Gravity.CENTER);
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
-            row.addView(makeTV(item.getName()));
+            row.addView(makeTV(itemDAO.get(item.getItemID()).getItemName()));
             table.addView(row);
         }
 
@@ -131,8 +142,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * adds delete button to each item on list
      * @return
+     * @param item
      */
-    private ImageButton makeDeleteItemButton(Item item) {
+    private ImageButton makeDeleteItemButton(RequestedItem item) {
         ImageButton dltButton = new ImageButton(this.getApplicationContext());
         dltButton.setForegroundGravity(Gravity.CENTER);
         dltButton.setBackgroundColor(Color.TRANSPARENT);
@@ -149,17 +161,17 @@ public class MainActivity extends AppCompatActivity {
         return dltButton;
     }
 
-    private void promptDeleteItem(Item item) {
+    private void promptDeleteItem(RequestedItem request) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
                 .setTitle("Confirm")
-                .setMessage("Do you really want to remove \"" + item.getName() + "\"?")
+                .setMessage("Do you really want to remove \"" + itemDAO.get(request.getItemID()) + "\"?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                        groceryListDAO.deleteItems(item);
+                        requestedItemDAO.removeRequestedItem(request);
                         buildItemTable();
                     }
                 })
@@ -176,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         return listView;
     }
 
-    private LinearLayout makeQuantityInput(Item item) {
+    private LinearLayout makeQuantityInput(RequestedItem item) {
         LinearLayout container = new LinearLayout(this.getApplicationContext());
 
         //np: number picker
@@ -187,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         inc.setText("+");
         inc.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
-            this.groceryListDAO.updateItem(item);
+            this.requestedItemDAO.updateRequestedItem(item);
             np.setText(item.getQuantity() + "");
         });
         Button dec = new Button(this.getApplicationContext());
@@ -196,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getQuantity() > 1) {
 
                 item.setQuantity(item.getQuantity() - 1);
-                this.groceryListDAO.updateItem(item);
+                this.requestedItemDAO.updateRequestedItem(item);
                 np.setText(item.getQuantity() + "");
             }
         });

@@ -24,6 +24,8 @@ public class StoreResultsActivity extends AppCompatActivity {
     private HashMap<String, Double> priceChopperRequest = new HashMap<>();
     private HashMap<String, Double> costcoRequest = new HashMap<>();
     private List<String> shopInput = new ArrayList<>();
+    private List<String> notExistItems = new ArrayList<>();
+
 
 
     @Override
@@ -36,6 +38,9 @@ public class StoreResultsActivity extends AppCompatActivity {
         shopInput.add("bread");
         shopInput.add("rice");
         shopInput.add("oil");
+        shopInput.add("Bicycle");
+        shopInput.add("book");
+
 
 
         fillInventory();
@@ -88,6 +93,9 @@ public class StoreResultsActivity extends AppCompatActivity {
             if (costcoInventory.containsKey(tmp)) {
                 costcoRequest.put(tmp, costcoInventory.get(tmp));
             }
+            if(!shawsInventory.containsKey(tmp) && !priceChopperInventory.containsKey(tmp) && !costcoInventory.containsKey(tmp)){
+                notExistItems.add(tmp);
+            }
         }
     }
 
@@ -111,6 +119,7 @@ public class StoreResultsActivity extends AppCompatActivity {
             if (costcoRequest.containsKey(tmp)) {
                 costco = costcoRequest.get(tmp);
             }
+
 
             if (shaws != null && chopper != null && costco != null) {
                 if (shaws <= chopper) {
@@ -158,14 +167,26 @@ public class StoreResultsActivity extends AppCompatActivity {
 
         if (!shawsRequest.isEmpty()) {
             subList(shawsRequest, table, "Shaws Items:");
-            //need to create new line in layout
+            //TODO need to create new line in layout
         }
         if (!priceChopperRequest.isEmpty()) {
             subList(priceChopperRequest, table, "Price Chopper Items:");
-            //need to create new line in layout
+            //TODO need to create new line in layout
         }
         if (!costcoRequest.isEmpty()) {
             subList(costcoRequest, table, "Costco Items:");
+        }
+
+        //This is the non exist items display
+        if(!notExistItems.isEmpty()){
+            TableRow row = new TableRow(this.getApplicationContext());
+            row.addView(makeTV("These Items Are Not Available" ));
+            table.addView(row);
+        for (int i = 0; i < notExistItems.size(); i++) {
+            row = new TableRow(this.getApplicationContext());
+            row.addView(makeTV("Item ("+(i+1)+"): "+notExistItems.get(i) ));
+            table.addView(row);
+           }
         }
     }
 
@@ -183,12 +204,14 @@ public class StoreResultsActivity extends AppCompatActivity {
         TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
+        int i=1;
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
             String key = entry.getKey();
             Double value = entry.getValue();
             TableRow row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("Item: " + key + "  -  Price: " + value));
+            row.addView(makeTV("Item ("+(i)+"): " + key + "  -  Price: " + value));
             tab.addView(row);
+            i++;
         }
     }
 }

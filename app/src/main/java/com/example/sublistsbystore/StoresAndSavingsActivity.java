@@ -26,10 +26,16 @@ public class StoresAndSavingsActivity extends AppCompatActivity {
         numStores = findViewById(R.id.numStoresText);
         slide = findViewById(R.id.numStoresSeekBar);
         storesNum = slide.getProgress();
+
     }
 
     public void nextPageButton(View view) {
         //FIXME: replace class name for 'how many stops' page --
         startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
+    }
+
+    public void prevPageButton(View view) {
+        //FIXME: replace class name for 'how many stops' page --
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 }

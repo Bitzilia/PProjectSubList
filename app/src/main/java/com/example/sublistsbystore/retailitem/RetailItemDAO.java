@@ -1,0 +1,20 @@
+package com.example.sublistsbystore.retailitem;
+
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+
+import java.util.List;
+
+@Dao
+public interface RetailItemDAO {
+    @Query("SELECT * from RetailItem where itemID=:itemID")
+    public List<RetailItem> getRetailItemsByID(int itemID);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public void insertRetailItem(RetailItem r);
+    @Query("SELECT * from RetailItem " +
+            "where itemID in (" +
+                "SELECT itemID FROM requesteditem)")
+    public List<RetailItem> getRequestedRetailItems();
+}
