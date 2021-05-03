@@ -45,14 +45,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class,"shoparound.db")
+        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "shoparound.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
         requestedItemDAO = db.requestedItemDAO();
+        itemDAO = db.itemDAO();
         setContentView(R.layout.activity_main);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
-        addItem("test1");
+//        addItem("test1");
         buildItemTable();
     }
 
@@ -61,9 +62,12 @@ public class MainActivity extends AppCompatActivity {
      * @param name
      */
     public void addItem(String name) {
-        if (itemDAO.get(name)==null) itemDAO.insertItem(new Item(name));
-        else {RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(),1);
-        requestedItemDAO.addRequestedItem(i);}
+        if (itemDAO.get(name) == null) itemDAO.insertItem(new Item(name));
+        else {
+            RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(), 1);
+            requestedItemDAO.addRequestedItem(i);
+        }
+        buildItemTable();
     }
 
     /**
@@ -128,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         table.removeAllViews(); // clear existing items
 
 //      for each item on list, create a delete button and add textView
-        for (RequestedItem item: requestedItemDAO.getAllRequestedItems()) {
+        for (RequestedItem item : requestedItemDAO.getAllRequestedItems()) {
             TableRow row = new TableRow(this.getApplicationContext());
             row.setGravity(Gravity.CENTER);
             row.addView(makeDeleteItemButton(item));
@@ -141,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * adds delete button to each item on list
-     * @return
      * @param item
+     * @return
      */
     private ImageButton makeDeleteItemButton(RequestedItem item) {
         ImageButton dltButton = new ImageButton(this.getApplicationContext());
