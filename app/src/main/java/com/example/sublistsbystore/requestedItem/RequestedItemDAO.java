@@ -13,14 +13,19 @@ import java.util.List;
 public interface RequestedItemDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void addRequestedItem(RequestedItem requestedItem);
+
     @Update
     public void updateRequestedItem(RequestedItem requestedItem);
+
     @Delete
     public void removeRequestedItem(RequestedItem requestedItem);
+
     @Query("SELECT * FROM RequestedItem")
     public List<RequestedItem> getAllRequestedItems();
-    @Query("DELETE FROM RequestedItem WHERE itemID=:itemID")
-    public void removeRequestedItemByID(int itemID);
+
+    @Query("DELETE FROM RequestedItem WHERE itemID=:ID")
+    public void removeRequestedItemByID(int ID);
+
     @Query("DELETE FROM RequestedItem " +
             "WHERE itemID = " +
                 "(SELECT itemID FROM Item " +

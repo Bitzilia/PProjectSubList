@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "shoparound.db")
                 .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
                 .build();
         requestedItemDAO = db.requestedItemDAO();
         itemDAO = db.itemDAO();
@@ -62,11 +61,12 @@ public class MainActivity extends AppCompatActivity {
      * @param name
      */
     public void addItem(String name) {
-        if (itemDAO.get(name) == null) itemDAO.insertItem(new Item(name));
-        else {
-            RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(), 1);
-            requestedItemDAO.addRequestedItem(i);
+        if (itemDAO.get(name) == null) {
+            itemDAO.insertItem(new Item(name));
         }
+        RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(), 1);
+        requestedItemDAO.addRequestedItem(i);
+
         buildItemTable();
     }
 

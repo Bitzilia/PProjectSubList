@@ -21,7 +21,7 @@ public class Item {
         this.itemName=itemName;
     }
 
-    public void setItemID(Integer itemID) {
+    public void setItemID(int itemID) {
         this.itemID=itemID;
     }
     public void setName(String itemName){

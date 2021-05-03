@@ -2,16 +2,17 @@ package com.example.sublistsbystore.requestedItem;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 /**
  * Represents a user-defined shopping list item
  */
-@Entity(primaryKeys = {"itemID", "quantity"},tableName = "RequestedItem")
+@Entity(tableName = "RequestedItem")
 
 public class RequestedItem {
     //yes, this is 1:1, so primary key is a foreign key.
     // Don't need to buy eggs from 2 different stores!
-    @ColumnInfo(name="itemID")
+    @ColumnInfo(name="itemID") @PrimaryKey
     private int itemID;
     @ColumnInfo(name="quantity", defaultValue = "1")
     private int quantity;
