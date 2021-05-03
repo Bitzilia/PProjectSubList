@@ -23,7 +23,7 @@ interface GroceryListDAO {
     void insertItem(Item item);
 
     @Delete
-    void deleteItems(Item... item);
+    void deleteItems(Item... item);//credit: http://marker.to/cnxnWO
 
     @Update
     void updateItem(Item item);
