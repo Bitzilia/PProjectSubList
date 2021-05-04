@@ -9,10 +9,12 @@ import java.util.List;
 
 @Dao
 public interface RetailItemDAO {
-    @Query("SELECT * from RetailItem where itemID=:itemID")
-    public List<RetailItem> getRetailItemsByID(int itemID);
+    @Query("SELECT * from RetailItem where itemID=:item")
+    public List<RetailItem> getRetailItemsByID(int item);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertRetailItem(RetailItem r);
+
     @Query("SELECT * from RetailItem " +
             "where itemID in (" +
                 "SELECT itemID FROM requesteditem)")

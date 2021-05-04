@@ -13,7 +13,7 @@ import com.example.sublistsbystore.store.Store;
 import com.example.sublistsbystore.store.StoreDAO;
 
 
-@Database(entities = {Item.class, Store.class, RetailItem.class, RequestedItem.class}, version = 6 ,exportSchema = false)
+@Database(entities = {Item.class, Store.class, RetailItem.class, RequestedItem.class}, version = 7 ,exportSchema = false)
 public abstract class ShoparoundDB extends RoomDatabase {
     public abstract RequestedItemDAO requestedItemDAO();
     public abstract ItemDAO itemDAO();

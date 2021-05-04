@@ -23,8 +23,8 @@ public interface RequestedItemDAO {
     @Query("SELECT * FROM RequestedItem")
     public List<RequestedItem> getAllRequestedItems();
 
-    @Query("DELETE FROM RequestedItem WHERE itemID=:ID")
-    public void removeRequestedItemByID(int ID);
+    @Query("DELETE FROM RequestedItem WHERE itemID=:itemID")
+    public void removeRequestedItemByID(int itemID);
 
     @Query("DELETE FROM RequestedItem " +
             "WHERE itemID = " +
