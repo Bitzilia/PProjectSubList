@@ -3,9 +3,12 @@ package com.example.sublistsbystore;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,7 +34,6 @@ public class StoreResultsActivity extends AppCompatActivity {
     private HashMap<String, Double> priceChopperRequest = new HashMap<>();
     private HashMap<String, Double> costcoRequest = new HashMap<>();
     private List<String> shopInput = new ArrayList<>();
-    //private HashMap<String, Integer> nameQuantity = new HashMap<>();
     private List<String> notExistItems = new ArrayList<>();
     private ItemDAO itemDAO;
     private RequestedItemDAO requestedItemDAO;
@@ -88,7 +90,7 @@ public class StoreResultsActivity extends AppCompatActivity {
             String key = entry.getKey();
             int value = entry.getValue();
             shopInput.add(key);
-
+            //Toast.makeText(this, String.valueOf(value), Toast.LENGTH_SHORT).show();
            }
         }
     }
@@ -221,21 +223,49 @@ public class StoreResultsActivity extends AppCompatActivity {
         table.removeAllViews();
 
         if (!shawsRequest.isEmpty()) {
-            subList(shawsRequest, table, "Shaws Items:");
-            //TODO need to create new line in layout
+            /*TableRow firstRow = new TableRow(this.getApplicationContext());
+            firstRow.addView(makeTV("SHAWS:"));
+            table.addView(firstRow);
+            TableRow secondRow = new TableRow(this.getApplicationContext());
+            secondRow.addView(makeTV("|CHK|  |NAME|       |PRICE|   |QUANTITY|"));
+            table.addView(secondRow);*/
+             subList(shawsRequest, table, "SHAWS" );
+            TableRow space = new TableRow(this.getApplicationContext());
+            TextView s = new TextView(this.getApplicationContext());
+            s.setText("SPACE");
+            s.setTextColor(0x000000ff);
+            space.addView(s);
+            table.addView(space);
+
+
+
+
         }
         if (!priceChopperRequest.isEmpty()) {
-            subList(priceChopperRequest, table, "Price Chopper Items:");
-            //TODO need to create new line in layout
+
+             subList(priceChopperRequest, table,"PRICE CHOPPER" );
+            TableRow space = new TableRow(this.getApplicationContext());
+            TextView s = new TextView(this.getApplicationContext());
+            s.setText("SPACE");
+            s.setTextColor(0x000000ff);
+            space.addView(s);
+            table.addView(space);
         }
         if (!costcoRequest.isEmpty()) {
-            subList(costcoRequest, table, "Costco Items:");
+
+             subList(costcoRequest, table,"COSTCO" );
+            TableRow space = new TableRow(this.getApplicationContext());
+            TextView s = new TextView(this.getApplicationContext());
+            s.setText("SPACE");
+            s.setTextColor(0x000000ff);
+            space.addView(s);
+            table.addView(space);
         }
 
         //This is the non exist items display
         if(!notExistItems.isEmpty()){
             TableRow row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("These Items Are Not Available" ));
+            row.addView(makeTV("NOT AVAILABLE" ));
             table.addView(row);
         for (int i = 0; i < notExistItems.size(); i++) {
             row = new TableRow(this.getApplicationContext());
@@ -249,24 +279,78 @@ public class StoreResultsActivity extends AppCompatActivity {
 
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
-        view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+        view.setTextColor(0xff0000ff);
+         //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size));
+
 
         return view;
     }
 
+     private TextView makeTV2(String word) {
+
+        TextView view = new TextView(this.getApplicationContext());
+        view.setText(word);
+        //view.setTextColor(0x000000ff);
+         //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
+        return view;
+    }
+
     private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
-        TableRow firstRow = new TableRow(this.getApplicationContext());
+        double total=0;
+         TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
-        int i=1;
+        TableRow secondRow = new TableRow(this.getApplicationContext());
+        secondRow.addView(makeTV("|CHK|  |NAME|       |PRICE|   |QUANTITY|"));
+        tab.addView(secondRow);
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
             String key = entry.getKey();
             Double value = entry.getValue();
+
+            int quantity = StaticData.nameQuantityFrmDB.get(key);
+            total+= (value*quantity);
+            //CheckBox x = new CheckBox(this);
             TableRow row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("Item ("+(i)+"): " + key + "  -  Price: " + value));
+             row.setGravity(Gravity.CENTER);
+
+
+
+             row.addView(makeTV2(key));
+            //row.addView(makeTV2(key));
+            //row.addView(makeTV2(" "));
+            row.addView(makeTV2(String.valueOf(value)));
+            row.addView(makeTV2(" "));
+            row.addView(makeTV2(String.valueOf(quantity)));
+
+
+
+
+
             tab.addView(row);
-            i++;
+
         }
+        TableRow rowT = new TableRow(this.getApplicationContext());
+        rowT.addView(makeTV("SUBTOTAL: $"+Math.round(total * 100.0) / 100.0 ));
+        tab.addView(rowT);
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

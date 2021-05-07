@@ -57,17 +57,13 @@ public class MainActivity extends AppCompatActivity {
         requestedItemDAO = db.requestedItemDAO();
         itemDAO = db.itemDAO();
         setContentView(R.layout.activity_main);
-
-
-
+        scale = getApplicationContext().getResources().getDisplayMetrics().density;
+        buildItemTable();
         for(RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
             itemName = itemDAO.get(r.getItemID()).getItemName();
             int itemQuantity = r.getQuantity();
             StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
         }
-
-        scale = getApplicationContext().getResources().getDisplayMetrics().density;
-        buildItemTable();
     }
 
     /**
@@ -80,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
         RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(), 1);
         requestedItemDAO.addRequestedItem(i);
+
 
         buildItemTable();
     }

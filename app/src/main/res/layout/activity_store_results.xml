@@ -13,7 +13,12 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/text"
-        android:textSize="@dimen/size" />
+        android:textColor="#04B50B"
+        android:textColorHighlight="#170101"
+        android:textColorHint="#F60202"
+        android:textColorLink="#000000"
+        android:textSize="@dimen/size"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
