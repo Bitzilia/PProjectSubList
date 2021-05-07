@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -37,6 +38,10 @@ public class StoreResultsActivity extends AppCompatActivity {
     private List<String> notExistItems = new ArrayList<>();
     private ItemDAO itemDAO;
     private RequestedItemDAO requestedItemDAO;
+    private double grandT=0;
+    private TextView g;
+
+
 
 
     @Override
@@ -44,21 +49,10 @@ public class StoreResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_results);
 
-        if (!StaticData.nameQuantityFrmDB.isEmpty()) {
-
-            //Toast.makeText(this, StaticData.itemNameList.get(0), Toast.LENGTH_SHORT).show();
-        }
+        g =  findViewById(R.id.gtot);
 
 
-        /*for(RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
-            String itemName = itemDAO.get(r.getItemID()).getItemName();
-            int itemQuantity = r.getQuantity();
 
-            //Toast.makeText(this, itemName , Toast.LENGTH_SHORT).show();
-        }*/
-
-
-        //
         //  from customer
         /*shopInput.add("milk");
         shopInput.add("bread");
@@ -71,6 +65,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         shopInputFillFromDB();
 
 
+
         fillInventory();
         prepare1();
         prepare2();
@@ -78,19 +73,16 @@ public class StoreResultsActivity extends AppCompatActivity {
 
     }
 
-    private void shopInputFillFromDB() {
-        if (!StaticData.nameQuantityFrmDB.isEmpty()) {
-
-            //Toast.makeText(this, StaticData.itemNameList.get(0), Toast.LENGTH_SHORT).show();
-
-            for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
-                String key = entry.getKey();
-                int value = entry.getValue();
-                shopInput.add(key);
-                //Toast.makeText(this, String.valueOf(value), Toast.LENGTH_SHORT).show();
-            }
+    private void shopInputFillFromDB(){
+        if(!StaticData.nameQuantityFrmDB.isEmpty()) {
+        for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
+            String key = entry.getKey();
+            int value = entry.getValue();
+            shopInput.add(key);
+           }
         }
     }
+
 
 
     private void fillInventory() {
@@ -122,14 +114,6 @@ public class StoreResultsActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    /*private String requestedItemName(RequestedItem r){
-        return  itemDAO.get(r.getItemID()).getItemName();
-    }
-
-
-    private int requestedItemQuantity(RequestedItem r){
-        return r.getQuantity();
-    }*/
 
 
     //making subLists per store with customer's requests
@@ -146,7 +130,7 @@ public class StoreResultsActivity extends AppCompatActivity {
             if (costcoInventory.containsKey(tmp)) {
                 costcoRequest.put(tmp, costcoInventory.get(tmp));
             }
-            if (!shawsInventory.containsKey(tmp) && !priceChopperInventory.containsKey(tmp) && !costcoInventory.containsKey(tmp)) {
+            if(!shawsInventory.containsKey(tmp) && !priceChopperInventory.containsKey(tmp) && !costcoInventory.containsKey(tmp)){
                 notExistItems.add(tmp);
             }
         }
@@ -216,17 +200,11 @@ public class StoreResultsActivity extends AppCompatActivity {
     private void buildList() {
 
         TableLayout table = findViewById(R.id.table);
-        table.setColumnStretchable(1, true);
         table.removeAllViews();
 
         if (!shawsRequest.isEmpty()) {
-            /*TableRow firstRow = new TableRow(this.getApplicationContext());
-            firstRow.addView(makeTV("SHAWS:"));
-            table.addView(firstRow);
-            TableRow secondRow = new TableRow(this.getApplicationContext());
-            secondRow.addView(makeTV("|CHK|  |NAME|       |PRICE|   |QUANTITY|"));
-            table.addView(secondRow);*/
-            subList(shawsRequest, table, "SHAWS");
+
+             subList(shawsRequest, table, "SHAWS" );
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
             s.setText("SPACE");
@@ -234,11 +212,10 @@ public class StoreResultsActivity extends AppCompatActivity {
             space.addView(s);
             table.addView(space);
 
-
         }
         if (!priceChopperRequest.isEmpty()) {
 
-            subList(priceChopperRequest, table, "PRICE CHOPPER");
+             subList(priceChopperRequest, table,"P. CHPR" );
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
             s.setText("SPACE");
@@ -248,7 +225,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
         if (!costcoRequest.isEmpty()) {
 
-            subList(costcoRequest, table, "COSTCO");
+             subList(costcoRequest, table,"COSTCO" );
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
             s.setText("SPACE");
@@ -258,16 +235,20 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
 
         //This is the non exist items display
-        if (!notExistItems.isEmpty()) {
+        if(!notExistItems.isEmpty()){
             TableRow row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("NOT AVAILABLE"));
+            row.addView(makeTV("N/A" ));
             table.addView(row);
-            for (int i = 0; i < notExistItems.size(); i++) {
-                row = new TableRow(this.getApplicationContext());
-                row.addView(makeTV("Item (" + (i + 1) + "): " + notExistItems.get(i)));
-                table.addView(row);
-            }
+        for (int i = 0; i < notExistItems.size(); i++) {
+            row = new TableRow(this.getApplicationContext());
+            row.addView(makeTV("Item("+(i+1)+"): "));
+            row.addView(makeTV2(notExistItems.get(i) ));
+            table.addView(row);
+           }
         }
+
+        g.setText("GRAND TOTAL: $ "+Math.round(grandT * 100.0) / 100.0);
+
     }
 
     private TextView makeTV(String word) {
@@ -275,32 +256,32 @@ public class StoreResultsActivity extends AppCompatActivity {
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
         view.setTextColor(0xff0000ff);
-        //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+         //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size));
 
 
         return view;
     }
 
-    private TextView makeTV2(String word) {
+     private TextView makeTV2(String word) {
 
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
         //view.setTextColor(0x000000ff);
-        //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+         view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
         return view;
     }
 
     private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
-        double total = 0;
-        TableRow firstRow = new TableRow(this.getApplicationContext());
+        double total=0;
+         TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
         TableRow secondRow = new TableRow(this.getApplicationContext());
         secondRow.addView(makeTV("|CHK|"));
-        secondRow.addView(makeTV("|NAME|"));
-        secondRow.addView(makeTV("|PRICE|"));
+        secondRow.addView(makeTV("|NAME|      "));
+        secondRow.addView(makeTV("|PRICE|      "));
         secondRow.addView(makeTV("|QUANTITY|"));
         tab.addView(secondRow);
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
@@ -308,28 +289,35 @@ public class StoreResultsActivity extends AppCompatActivity {
             Double value = entry.getValue();
 
             int quantity = StaticData.nameQuantityFrmDB.get(key);
-            total += (value * quantity);
-            //CheckBox x = new CheckBox(this);
+            total+= (value*quantity);
             TableRow row = new TableRow(this.getApplicationContext());
+             row.setGravity(Gravity.CENTER);
 
 
-            row.setGravity(Gravity.CENTER);
-            row.addView(makeTV("")); //TODO replace with Checkbox
 
-            row.addView(makeTV2(key));
-            row.addView(makeTV2(String.valueOf(value)));
-            row.addView(makeTV2(String.valueOf(quantity)));
+            CheckBox box = new CheckBox(getApplicationContext());
+            box.setText("");
+            row.addView(box);
+            row.addView(makeTV2("   "+key));
+            row.addView(makeTV2("    "+value));
+            row.addView(makeTV2("        "+quantity));
 
+            box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    row.setBackgroundColor(Color.GRAY);
+
+                }
+            });
 
             tab.addView(row);
 
         }
-        //TODO: these need to be outside of table or it needs to be dealt with using column span
-//        TableRow rowT = new TableRow(this.getApplicationContext());
-//        rowT.addView(makeTV("SUBTOTAL: $" + Math.round(total * 100.0) / 100.0));
-//        tab.addView(rowT);
+        grandT+=total;
+        TableRow rowT = new TableRow(this.getApplicationContext());
+        rowT.addView(makeTV("COST: $ "));
+        rowT.addView(makeTV(String.valueOf(Math.round(total * 100.0) / 100.0 )));
+        tab.addView(rowT);
 
     }
-
 
 }

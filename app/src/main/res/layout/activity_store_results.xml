@@ -22,7 +22,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="600dp">
+        android:layout_height="568dp">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -34,6 +34,14 @@
                 android:layout_height="match_parent" />
         </HorizontalScrollView>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/gtot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FB0000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/button"
