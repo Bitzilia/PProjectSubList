@@ -28,6 +28,7 @@ import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
 import com.example.sublistsbystore.retailitem.RetailItemDAO;
 import com.example.sublistsbystore.store.StoreDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -39,12 +40,16 @@ public class MainActivity extends AppCompatActivity {
     StoreDAO storeDAO;
     RetailItemDAO retailItemDAO;
     ShoparoundDB db;
-    //    private List<Item> itemList = new ArrayList<>();
     float scale;
+
+    String itemName;
+
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "shoparound.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
@@ -52,8 +57,16 @@ public class MainActivity extends AppCompatActivity {
         requestedItemDAO = db.requestedItemDAO();
         itemDAO = db.itemDAO();
         setContentView(R.layout.activity_main);
+
+
+
+        for(RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
+            itemName = itemDAO.get(r.getItemID()).getItemName();
+            int itemQuantity = r.getQuantity();
+            StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
+        }
+
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
-//        addItem("test1");
         buildItemTable();
     }
 
@@ -70,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
         buildItemTable();
     }
+
+
 
     /**
      * inserts a new item to shopping list
@@ -139,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
             row.addView(makeTV(itemDAO.get(item.getItemID()).getItemName()));
+
+
+
             table.addView(row);
         }
 

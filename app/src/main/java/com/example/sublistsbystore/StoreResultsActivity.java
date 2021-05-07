@@ -9,11 +9,18 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.sublistsbystore.item.Item;
+import com.example.sublistsbystore.item.ItemDAO;
+import com.example.sublistsbystore.requestedItem.RequestedItem;
+import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class StoreResultsActivity extends AppCompatActivity {
 
@@ -24,7 +31,11 @@ public class StoreResultsActivity extends AppCompatActivity {
     private HashMap<String, Double> priceChopperRequest = new HashMap<>();
     private HashMap<String, Double> costcoRequest = new HashMap<>();
     private List<String> shopInput = new ArrayList<>();
+    //private HashMap<String, Integer> nameQuantity = new HashMap<>();
     private List<String> notExistItems = new ArrayList<>();
+    private ItemDAO itemDAO;
+    private RequestedItemDAO requestedItemDAO;
+
 
 
 
@@ -33,13 +44,31 @@ public class StoreResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_results);
 
+        if(!StaticData.nameQuantityFrmDB.isEmpty()) {
+
+            //Toast.makeText(this, StaticData.itemNameList.get(0), Toast.LENGTH_SHORT).show();
+        }
+
+
+        /*for(RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
+            String itemName = itemDAO.get(r.getItemID()).getItemName();
+            int itemQuantity = r.getQuantity();
+
+            //Toast.makeText(this, itemName , Toast.LENGTH_SHORT).show();
+        }*/
+
+
+        //
         //  from customer
-        shopInput.add("milk");
+        /*shopInput.add("milk");
         shopInput.add("bread");
         shopInput.add("rice");
         shopInput.add("oil");
         shopInput.add("Bicycle");
-        shopInput.add("book");
+        shopInput.add("book");*/
+
+
+        shopInputFillFromDB();
 
 
 
@@ -49,6 +78,22 @@ public class StoreResultsActivity extends AppCompatActivity {
         buildList();
 
     }
+
+    private void shopInputFillFromDB(){
+        if(!StaticData.nameQuantityFrmDB.isEmpty()) {
+
+            //Toast.makeText(this, StaticData.itemNameList.get(0), Toast.LENGTH_SHORT).show();
+
+        for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
+            String key = entry.getKey();
+            int value = entry.getValue();
+            shopInput.add(key);
+
+           }
+        }
+    }
+
+
 
     private void fillInventory() {
         shawsInventory.put("milk", 3.99);
@@ -78,6 +123,16 @@ public class StoreResultsActivity extends AppCompatActivity {
     public void buttonOver(View view) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
+
+    /*private String requestedItemName(RequestedItem r){
+        return  itemDAO.get(r.getItemID()).getItemName();
+    }
+
+
+    private int requestedItemQuantity(RequestedItem r){
+        return r.getQuantity();
+    }*/
+
 
     //making subLists per store with customer's requests
     private void prepare1() {
