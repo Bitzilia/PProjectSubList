@@ -51,6 +51,7 @@ public class StoreResultsActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         prepare1();
         prepare2();
         buildList();
+
 
     }
 
@@ -128,6 +130,10 @@ public class StoreResultsActivity extends AppCompatActivity {
     //making subLists per store with customer's requests
     private void prepare1() {
 
+        shawsRequest.clear();
+        priceChopperRequest.clear();
+        costcoRequest.clear();
+        notExistItems.clear();
         for (int i = 0; i < shopInput.size(); i++) {
             String tmp = shopInput.get(i);
             if (shawsInventory.containsKey(tmp)) {
@@ -207,30 +213,43 @@ public class StoreResultsActivity extends AppCompatActivity {
 
 
     public void prepare3(View v){
+
         grandT=0;
+        //shopInputFillFromDB();
+        //fillInventory();
+        //prepare1();
+        //prepare2();
+
         int shawsSize= shawsRequest.size();
         int priceChSize= priceChopperRequest.size();
         int costcoSize= costcoRequest.size();
+
+
         if(threeStores.isChecked()){
-            prepare1();
-            prepare2();
+
             buildList(); //build the whole list, then build list
+
         }
 
-        if(twoStores.isChecked()){
-            prepare1();
-            prepare2();
-            if(shawsSize<priceChSize && shawsSize<costcoSize){
-                shawsRequest.clear();
-                buildList();
-            }else if(priceChSize<costcoSize && priceChSize< shawsSize){
-                priceChopperRequest.clear();
-                buildList();
-            }else{
-                costcoRequest.clear();
-                buildList();
+
+
+            if (twoStores.isChecked()) {
+
+                if (shawsSize < priceChSize && shawsSize < costcoSize) {
+                    shawsRequest.clear();
+                    buildList();
+
+                } else if (priceChSize < costcoSize && priceChSize < shawsSize) {
+                    priceChopperRequest.clear();
+                    buildList();
+
+                } else {
+                    costcoRequest.clear();
+                    buildList();
+
+                }
             }
-        }
+
 
 
         if(oneStore.isChecked()){
@@ -238,17 +257,21 @@ public class StoreResultsActivity extends AppCompatActivity {
                 priceChopperRequest.clear();
                 costcoRequest.clear();
                 buildList();
+
             }else if(priceChSize>costcoSize){
                 costcoRequest.clear();
                 shawsRequest.clear();
                 buildList();
+
             }else{
                 priceChopperRequest.clear();
                 shawsRequest.clear();
                 buildList();
+
             }
         }
-
+        prepare1();
+        prepare2();
 
 
     }
@@ -263,6 +286,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         if (!shawsRequest.isEmpty()) {
 
              subList(shawsRequest, table, "SHAWS" );
+
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
             s.setText("SPACE");
@@ -274,6 +298,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         if (!priceChopperRequest.isEmpty()) {
 
              subList(priceChopperRequest, table,"P. CHPR" );
+
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
             s.setText("SPACE");
@@ -284,6 +309,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         if (!costcoRequest.isEmpty()) {
 
              subList(costcoRequest, table,"COSTCO" );
+
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
             s.setText("SPACE");
@@ -292,22 +318,32 @@ public class StoreResultsActivity extends AppCompatActivity {
             table.addView(space);
         }
 
-        //This is the non exist items display
-        if(!notExistItems.isEmpty()){
-            TableRow row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("N/A" ));
-            table.addView(row);
-        for (int i = 0; i < notExistItems.size(); i++) {
-            row = new TableRow(this.getApplicationContext());
-            row.addView(makeTV("Item("+(i+1)+"): "));
-            row.addView(makeTV2(notExistItems.get(i) ));
-            table.addView(row);
-           }
-        }
+
+
+            //This is the non exist items display
+            if(!notExistItems.isEmpty()){
+                TableRow row = new TableRow(this.getApplicationContext());
+                row.addView(makeTV("N/A" ));
+                table.addView(row);
+                for (int i = 0; i < notExistItems.size(); i++) {
+                    row = new TableRow(this.getApplicationContext());
+                    row.addView(makeTV("Item("+(i+1)+"): "));
+                    row.addView(makeTV2(notExistItems.get(i) ));
+                    table.addView(row);
+                }
+            }
+
+
 
         g.setText("GRAND TOTAL: $ "+Math.round(grandT * 100.0) / 100.0);
 
     }
+
+    private void buildTheNAitems(){
+
+
+    }
+
 
     private TextView makeTV(String word) {
 
