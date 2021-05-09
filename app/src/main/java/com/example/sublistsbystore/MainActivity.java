@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
                 .setTitle("Confirm")
-                .setMessage("Do you really want to remove \"" + itemDAO.get(request.getItemID()) + "\"?")
+                .setMessage("Do you really want to remove \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
