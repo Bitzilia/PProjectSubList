@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     public void clearListBtn(View view) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
-                .setTitle(R.string.confirm_clear_list_text)
-                .setMessage(R.string.confirm_clear_list_message)
+                .setTitle(getString(R.string.confirm_clear_list_text))
+                .setMessage(getString(R.string.confirm_clear_list_message))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
     private void promptDeleteItem(RequestedItem request) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
-                .setTitle(R.string.confirm_delete_item_text)
-                .setMessage(R.string.confirm_delete_item_message + "\" + itemDAO.get(request.getItemID()).getItemName() + \"?")
+                .setTitle(getString(R.string.confirm_delete_item_text))
+                .setMessage(getString(R.string.confirm_delete_item_message) + " \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
