@@ -40,7 +40,7 @@ public class StoreResultsActivity extends AppCompatActivity {
     private List<String> notExistItems = new ArrayList<>();
     private ItemDAO itemDAO;
     private RequestedItemDAO requestedItemDAO;
-    private double grandT=0;
+    private double grandT = 0;
     private TextView g;
     private RadioButton oneStore;
     private RadioButton twoStores;
@@ -48,21 +48,16 @@ public class StoreResultsActivity extends AppCompatActivity {
     private int numStores = 3;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_results);
 
-        g =  findViewById(R.id.gtot);
+        g = findViewById(R.id.gtot);
         oneStore = findViewById(R.id.oneST);
         twoStores = findViewById(R.id.twoST);
         threeStores = findViewById(R.id.threeST);
         threeStores.setChecked(true);
-
 
 
         //  from customer
@@ -84,16 +79,15 @@ public class StoreResultsActivity extends AppCompatActivity {
 
     }
 
-    private void shopInputFillFromDB(){
-        if(!StaticData.nameQuantityFrmDB.isEmpty()) {
-        for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
-            String key = entry.getKey();
-            //int value = entry.getValue();
-            shopInput.add(key);
-           }
+    private void shopInputFillFromDB() {
+        if (!StaticData.nameQuantityFrmDB.isEmpty()) {
+            for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
+                String key = entry.getKey();
+                //int value = entry.getValue();
+                shopInput.add(key);
+            }
         }
     }
-
 
 
     private void fillInventory() {
@@ -119,12 +113,12 @@ public class StoreResultsActivity extends AppCompatActivity {
 
     /**
      * button to nav to next page
+     *
      * @param view
      */
     public void buttonOver(View view) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
-
 
 
     //making subLists per store with customer's requests
@@ -145,7 +139,7 @@ public class StoreResultsActivity extends AppCompatActivity {
             if (costcoInventory.containsKey(tmp)) {
                 costcoRequest.put(tmp, costcoInventory.get(tmp));
             }
-            if(!shawsInventory.containsKey(tmp) && !priceChopperInventory.containsKey(tmp) && !costcoInventory.containsKey(tmp)){
+            if (!shawsInventory.containsKey(tmp) && !priceChopperInventory.containsKey(tmp) && !costcoInventory.containsKey(tmp)) {
                 notExistItems.add(tmp);
             }
         }
@@ -212,70 +206,91 @@ public class StoreResultsActivity extends AppCompatActivity {
     }
 
 
-    public void prepare3(View v){
+    public void prepare3(View v) {
 
-        grandT=0;
-        //shopInputFillFromDB();
-        //fillInventory();
-        //prepare1();
-        //prepare2();
+        grandT = 0;
 
-        int shawsSize= shawsRequest.size();
-        int priceChSize= priceChopperRequest.size();
-        int costcoSize= costcoRequest.size();
+        int shawsSize = shawsRequest.size();
+        int priceChSize = priceChopperRequest.size();
+        int costcoSize = costcoRequest.size();
+        double shawsSTotal = subTotal(shawsRequest);
+        double priceChSTotal = subTotal(priceChopperRequest);
+        double costcoSTotal = subTotal(costcoRequest);
 
 
-        if(threeStores.isChecked()){
-
-            buildList(); //build the whole list, then build list
-
+        if (threeStores.isChecked()) {
+            buildList(); //build the whole list
         }
 
 
-
-            if (twoStores.isChecked()) {
-
-                if (shawsSize < priceChSize && shawsSize < costcoSize) {
+        if (twoStores.isChecked()) {
+            if (shawsSize == priceChSize && priceChSize == costcoSize) {
+                //based on individual subtotal
+                if (shawsSTotal < priceChSTotal && shawsSTotal < costcoSTotal) {
                     shawsRequest.clear();
                     buildList();
-
-                } else if (priceChSize < costcoSize && priceChSize < shawsSize) {
+                } else if (priceChSTotal < costcoSTotal && priceChSTotal < shawsSTotal) {
                     priceChopperRequest.clear();
                     buildList();
-
                 } else {
                     costcoRequest.clear();
                     buildList();
+                }
 
+            } else {
+                if (shawsSize < priceChSize && shawsSize < costcoSize) {
+                    shawsRequest.clear();
+                    buildList();
+                } else if (priceChSize < costcoSize && priceChSize < shawsSize) {
+                    priceChopperRequest.clear();
+                    buildList();
+                } else {
+                    costcoRequest.clear();
+                    buildList();
                 }
             }
+        }
 
 
+        if (oneStore.isChecked()) {
+            if (shawsSize == priceChSize && priceChSize == costcoSize) {
+                //based on individual subtotal
 
-        if(oneStore.isChecked()){
-            if(shawsSize>priceChSize && shawsSize>costcoSize){
-                priceChopperRequest.clear();
-                costcoRequest.clear();
-                buildList();
+                if (shawsSTotal > priceChSTotal && shawsSTotal > costcoSTotal) {
+                    priceChopperRequest.clear();
+                    costcoRequest.clear();
+                    buildList();
+                } else if (priceChSTotal > costcoSTotal) {
+                    costcoRequest.clear();
+                    shawsRequest.clear();
+                    buildList();
+                } else {
+                    priceChopperRequest.clear();
+                    shawsRequest.clear();
+                    buildList();
+                }
 
-            }else if(priceChSize>costcoSize){
-                costcoRequest.clear();
-                shawsRequest.clear();
-                buildList();
-
-            }else{
-                priceChopperRequest.clear();
-                shawsRequest.clear();
-                buildList();
-
+            } else {
+                if (shawsSize > priceChSize && shawsSize > costcoSize) {
+                    priceChopperRequest.clear();
+                    costcoRequest.clear();
+                    buildList();
+                } else if (priceChSize > costcoSize) {
+                    costcoRequest.clear();
+                    shawsRequest.clear();
+                    buildList();
+                } else {
+                    priceChopperRequest.clear();
+                    shawsRequest.clear();
+                    buildList();
+                }
             }
         }
+
+
         prepare1();
         prepare2();
-
-
     }
-
 
 
     private void buildList() {
@@ -285,7 +300,7 @@ public class StoreResultsActivity extends AppCompatActivity {
 
         if (!shawsRequest.isEmpty()) {
 
-             subList(shawsRequest, table, "SHAWS" );
+            subList(shawsRequest, table, "SHAWS");
 
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
@@ -297,7 +312,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
         if (!priceChopperRequest.isEmpty()) {
 
-             subList(priceChopperRequest, table,"P. CHPR" );
+            subList(priceChopperRequest, table, "P. CHPR");
 
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
@@ -308,7 +323,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
         if (!costcoRequest.isEmpty()) {
 
-             subList(costcoRequest, table,"COSTCO" );
+            subList(costcoRequest, table, "COSTCO");
 
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
@@ -319,27 +334,25 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
 
 
-
-            //This is the non exist items display
-            if(!notExistItems.isEmpty()){
-                TableRow row = new TableRow(this.getApplicationContext());
-                row.addView(makeTV("N/A" ));
+        //This is the non exist items display
+        if (!notExistItems.isEmpty()) {
+            TableRow row = new TableRow(this.getApplicationContext());
+            row.addView(makeTV("N/A"));
+            table.addView(row);
+            for (int i = 0; i < notExistItems.size(); i++) {
+                row = new TableRow(this.getApplicationContext());
+                row.addView(makeTV("Item(" + (i + 1) + "): "));
+                row.addView(makeTV2(notExistItems.get(i)));
                 table.addView(row);
-                for (int i = 0; i < notExistItems.size(); i++) {
-                    row = new TableRow(this.getApplicationContext());
-                    row.addView(makeTV("Item("+(i+1)+"): "));
-                    row.addView(makeTV2(notExistItems.get(i) ));
-                    table.addView(row);
-                }
             }
+        }
 
 
-
-        g.setText("GRAND TOTAL: $ "+Math.round(grandT * 100.0) / 100.0);
+        g.setText("GRAND TOTAL: $ " + Math.round(grandT * 100.0) / 100.0);
 
     }
 
-    private void buildTheNAitems(){
+    private void buildTheNAitems() {
 
 
     }
@@ -350,27 +363,27 @@ public class StoreResultsActivity extends AppCompatActivity {
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
         view.setTextColor(0xff0000ff);
-         //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+        //view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size));
 
 
         return view;
     }
 
-     private TextView makeTV2(String word) {
+    private TextView makeTV2(String word) {
 
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
         //view.setTextColor(0x000000ff);
-         view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+        view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
         return view;
     }
 
     private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
-        double total=0;
+        double total = 0;
 
-         TableRow firstRow = new TableRow(this.getApplicationContext());
+        TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
         TableRow secondRow = new TableRow(this.getApplicationContext());
@@ -385,18 +398,17 @@ public class StoreResultsActivity extends AppCompatActivity {
             Double value = entry.getValue();
 
             int quantity = StaticData.nameQuantityFrmDB.get(key);
-            total+= (value*quantity);
+            total += (value * quantity);
             TableRow row = new TableRow(this.getApplicationContext());
-             row.setGravity(Gravity.CENTER);
-
+            row.setGravity(Gravity.CENTER);
 
 
             CheckBox box = new CheckBox(getApplicationContext());
             box.setText("");
             row.addView(box);
-            row.addView(makeTV2("   "+key));
-            row.addView(makeTV2("    "+value));
-            row.addView(makeTV2("        "+quantity));
+            row.addView(makeTV2("   " + key));
+            row.addView(makeTV2("    " + value));
+            row.addView(makeTV2("        " + quantity));
 
             box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -408,12 +420,24 @@ public class StoreResultsActivity extends AppCompatActivity {
             tab.addView(row);
 
         }
-        grandT+=total;
+        grandT += total;
         TableRow rowT = new TableRow(this.getApplicationContext());
         rowT.addView(makeTV("COST: $ "));
-        rowT.addView(makeTV(String.valueOf(Math.round(total * 100.0) / 100.0 )));
+        rowT.addView(makeTV(String.valueOf(Math.round(total * 100.0) / 100.0)));
         tab.addView(rowT);
 
     }
 
+    private double subTotal(HashMap<String, Double> sub) {
+        double total = 0.0;
+        for (Map.Entry<String, Double> entry : sub.entrySet()) {
+
+            String key = entry.getKey();
+            Double value = entry.getValue();
+
+            int quantity = StaticData.nameQuantityFrmDB.get(key);
+            total += (value * quantity);
+        }
+        return total;
+    }
 }
