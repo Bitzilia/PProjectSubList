@@ -1,3 +1,6 @@
+/**
+ * This was done by Ali Alrubaye
+ */
 package com.example.sublistsbystore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -38,6 +42,11 @@ public class StoreResultsActivity extends AppCompatActivity {
     private RequestedItemDAO requestedItemDAO;
     private double grandT=0;
     private TextView g;
+    private RadioButton oneStore;
+    private RadioButton twoStores;
+    private RadioButton threeStores;
+    private int numStores = 3;
+
 
 
 
@@ -48,6 +57,10 @@ public class StoreResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_store_results);
 
         g =  findViewById(R.id.gtot);
+        oneStore = findViewById(R.id.oneST);
+        twoStores = findViewById(R.id.twoST);
+        threeStores = findViewById(R.id.threeST);
+        threeStores.setChecked(true);
 
 
 
@@ -61,10 +74,8 @@ public class StoreResultsActivity extends AppCompatActivity {
 
 
         shopInputFillFromDB();
-
-
-
         fillInventory();
+
         prepare1();
         prepare2();
         buildList();
@@ -75,7 +86,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         if(!StaticData.nameQuantityFrmDB.isEmpty()) {
         for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
             String key = entry.getKey();
-            int value = entry.getValue();
+            //int value = entry.getValue();
             shopInput.add(key);
            }
         }
@@ -195,6 +206,55 @@ public class StoreResultsActivity extends AppCompatActivity {
     }
 
 
+    public void prepare3(View v){
+        grandT=0;
+        int shawsSize= shawsRequest.size();
+        int priceChSize= priceChopperRequest.size();
+        int costcoSize= costcoRequest.size();
+        if(threeStores.isChecked()){
+            prepare1();
+            prepare2();
+            buildList(); //build the whole list, then build list
+        }
+
+        if(twoStores.isChecked()){
+            prepare1();
+            prepare2();
+            if(shawsSize<priceChSize && shawsSize<costcoSize){
+                shawsRequest.clear();
+                buildList();
+            }else if(priceChSize<costcoSize && priceChSize< shawsSize){
+                priceChopperRequest.clear();
+                buildList();
+            }else{
+                costcoRequest.clear();
+                buildList();
+            }
+        }
+
+
+        if(oneStore.isChecked()){
+            if(shawsSize>priceChSize && shawsSize>costcoSize){
+                priceChopperRequest.clear();
+                costcoRequest.clear();
+                buildList();
+            }else if(priceChSize>costcoSize){
+                costcoRequest.clear();
+                shawsRequest.clear();
+                buildList();
+            }else{
+                priceChopperRequest.clear();
+                shawsRequest.clear();
+                buildList();
+            }
+        }
+
+
+
+    }
+
+
+
     private void buildList() {
 
         TableLayout table = findViewById(R.id.table);
@@ -273,6 +333,7 @@ public class StoreResultsActivity extends AppCompatActivity {
 
     private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
         double total=0;
+
          TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
@@ -283,6 +344,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         secondRow.addView(makeTV(" QUANTITY "));
         tab.addView(secondRow);
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
+
             String key = entry.getKey();
             Double value = entry.getValue();
 
