@@ -15,9 +15,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.sublistsbystore.item.Item;
 import com.example.sublistsbystore.item.ItemDAO;
-import com.example.sublistsbystore.requestedItem.RequestedItem;
 import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
 
 import java.util.ArrayList;
@@ -279,10 +277,10 @@ public class StoreResultsActivity extends AppCompatActivity {
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
         TableRow secondRow = new TableRow(this.getApplicationContext());
-        secondRow.addView(makeTV("|CHK|"));
-        secondRow.addView(makeTV("|NAME|      "));
-        secondRow.addView(makeTV("|PRICE|      "));
-        secondRow.addView(makeTV("|QUANTITY|"));
+        secondRow.addView(makeTV(" CHK "));
+        secondRow.addView(makeTV(" NAME       "));
+        secondRow.addView(makeTV(" PRICE       "));
+        secondRow.addView(makeTV(" QUANTITY "));
         tab.addView(secondRow);
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
             String key = entry.getKey();
