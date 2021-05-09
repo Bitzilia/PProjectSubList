@@ -28,7 +28,6 @@ import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
 import com.example.sublistsbystore.retailitem.RetailItemDAO;
 import com.example.sublistsbystore.store.StoreDAO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -41,10 +40,7 @@ public class MainActivity extends AppCompatActivity {
     RetailItemDAO retailItemDAO;
     ShoparoundDB db;
     float scale;
-
     String itemName;
-
-    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +68,8 @@ public class MainActivity extends AppCompatActivity {
         RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(), 1);
         requestedItemDAO.addRequestedItem(i);
 
-
         buildItemTable();
     }
-
-
 
     /**
      * inserts a new item to shopping list
@@ -88,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         if (input.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Field cannot be empty!", Toast.LENGTH_SHORT).show();
         } else {
-
             addItem(input.getText().toString());
 
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -110,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             int itemQuantity = r.getQuantity();
             StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
         }
-
         startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
 
@@ -125,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("Do you really want to clear this list?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
                         List<RequestedItem> itemsToDelete = requestedItemDAO.getAllRequestedItems();
                         itemsToDelete.forEach(item -> requestedItemDAO.removeRequestedItem(item));
@@ -153,12 +143,8 @@ public class MainActivity extends AppCompatActivity {
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
             row.addView(makeTV(itemDAO.get(item.getItemID()).getItemName()));
-
-
-
             table.addView(row);
         }
-
     }
 
     /**
@@ -190,9 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("Do you really want to remove \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
-
                         requestedItemDAO.removeRequestedItem(request);
                         buildItemTable();
                     }
@@ -260,13 +244,4 @@ public class MainActivity extends AppCompatActivity {
 
         return container;
     }
-
-
-//    TODO: research 'bottom nav bar' design--> [<]Backward [Home/CurrentList] Forward[>]
-
-//    TODO: create intent that leads to how many stops page
-
-//    TODO: Implement popup after user clicks 'removeBtn' or 'clearListBtn'
-
-
 }
