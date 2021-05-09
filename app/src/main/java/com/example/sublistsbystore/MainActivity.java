@@ -28,7 +28,6 @@ import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
 import com.example.sublistsbystore.retailitem.RetailItemDAO;
 import com.example.sublistsbystore.store.StoreDAO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -41,10 +40,7 @@ public class MainActivity extends AppCompatActivity {
     RetailItemDAO retailItemDAO;
     ShoparoundDB db;
     float scale;
-
     String itemName;
-
-    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +55,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         buildItemTable();
-        for(RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
-            itemName = itemDAO.get(r.getItemID()).getItemName();
-            int itemQuantity = r.getQuantity();
-            StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
-        }
     }
 
     /**
@@ -77,11 +68,8 @@ public class MainActivity extends AppCompatActivity {
         RequestedItem i = new RequestedItem(itemDAO.get(name).getItemID(), 1);
         requestedItemDAO.addRequestedItem(i);
 
-
         buildItemTable();
     }
-
-
 
     /**
      * inserts a new item to shopping list
@@ -91,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
         EditText input = findViewById(R.id.user_text_input);
 
         if (input.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.unsuccessful_add, Toast.LENGTH_SHORT).show();
         } else {
-
             addItem(input.getText().toString());
 
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -108,8 +95,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void nextPageButton(View view) {
-        //FIXME: replace class name for 'how many stops' page --
-        startActivity(new Intent(getApplicationContext(), StoresAndSavingsActivity.class));
+        StaticData.nameQuantityFrmDB.clear();
+
+        for (RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
+            itemName = itemDAO.get(r.getItemID()).getItemName();
+            int itemQuantity = r.getQuantity();
+            StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
+        }
+        startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
 
     /**
@@ -119,11 +112,10 @@ public class MainActivity extends AppCompatActivity {
     public void clearListBtn(View view) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
-                .setTitle("Confirm")
-                .setMessage("Do you really want to clear this list?")
+                .setTitle(getString(R.string.confirm_clear_list_text))
+                .setMessage(getString(R.string.confirm_clear_list_message))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
                         List<RequestedItem> itemsToDelete = requestedItemDAO.getAllRequestedItems();
                         itemsToDelete.forEach(item -> requestedItemDAO.removeRequestedItem(item));
@@ -151,12 +143,8 @@ public class MainActivity extends AppCompatActivity {
             row.addView(makeDeleteItemButton(item));
             row.addView(makeQuantityInput(item));
             row.addView(makeTV(itemDAO.get(item.getItemID()).getItemName()));
-
-
-
             table.addView(row);
         }
-
     }
 
     /**
@@ -184,13 +172,11 @@ public class MainActivity extends AppCompatActivity {
     private void promptDeleteItem(RequestedItem request) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
-                .setTitle("Confirm")
-                .setMessage("Do you really want to remove \"" + itemDAO.get(request.getItemID()) + "\"?")
+                .setTitle(getString(R.string.confirm_delete_item_text))
+                .setMessage(getString(R.string.confirm_delete_item_message) + " \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
-
                         requestedItemDAO.removeRequestedItem(request);
                         buildItemTable();
                     }
@@ -258,13 +244,4 @@ public class MainActivity extends AppCompatActivity {
 
         return container;
     }
-
-
-//    TODO: research 'bottom nav bar' design--> [<]Backward [Home/CurrentList] Forward[>]
-
-//    TODO: create intent that leads to how many stops page
-
-//    TODO: Implement popup after user clicks 'removeBtn' or 'clearListBtn'
-
-
 }
