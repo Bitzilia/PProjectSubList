@@ -59,11 +59,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         buildItemTable();
-        for(RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
-            itemName = itemDAO.get(r.getItemID()).getItemName();
-            int itemQuantity = r.getQuantity();
-            StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
-        }
     }
 
     /**
@@ -108,8 +103,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void nextPageButton(View view) {
-        //FIXME: replace class name for 'how many stops' page --
-        startActivity(new Intent(getApplicationContext(), StoresAndSavingsActivity.class));
+        StaticData.nameQuantityFrmDB.clear();
+
+        for (RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
+            itemName = itemDAO.get(r.getItemID()).getItemName();
+            int itemQuantity = r.getQuantity();
+            StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
+        }
+
+        startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
 
     /**
