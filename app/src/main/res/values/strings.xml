@@ -5,5 +5,12 @@
     <string name="clear_list_button_text">Clear All Items</string>
 
     <string name="successful_add">Item was successfully added!</string>
+    <string name="unsuccessful_add">Failed to add Item!</string>
+
+    <string name="confirm_clear_list_text">Confirm</string>
+    <string name="confirm_clear_list_message">Do you really want to clear this list?</string>
+
+    <string name="confirm_delete_item_text">Confirm</string>
+    <string name="confirm_delete_item_message">Do want to remove</string>
 
 </resources>

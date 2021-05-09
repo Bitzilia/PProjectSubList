@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         EditText input = findViewById(R.id.user_text_input);
 
         if (input.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Field cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.unsuccessful_add, Toast.LENGTH_SHORT).show();
         } else {
             addItem(input.getText().toString());
 
@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     public void clearListBtn(View view) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
-                .setTitle("Confirm")
-                .setMessage("Do you really want to clear this list?")
+                .setTitle(R.string.confirm_clear_list_text)
+                .setMessage(R.string.confirm_clear_list_message)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
     private void promptDeleteItem(RequestedItem request) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
-                .setTitle("Confirm")
-                .setMessage("Do you really want to remove \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
+                .setTitle(R.string.confirm_delete_item_text)
+                .setMessage(R.string.confirm_delete_item_message + "\" + itemDAO.get(request.getItemID()).getItemName() + \"?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
