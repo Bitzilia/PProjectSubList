@@ -4,7 +4,6 @@
 package com.example.sublistsbystore;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,10 +17,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.sublistsbystore.item.ItemDAO;
-import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +33,6 @@ public class StoreResultsActivity extends AppCompatActivity {
     private HashMap<String, Double> costcoRequest = new HashMap<>();
     private List<String> shopInput = new ArrayList<>();
     private List<String> notExistItems = new ArrayList<>();
-    private ItemDAO itemDAO;
-    private RequestedItemDAO requestedItemDAO;
     private double grandT = 0;
     private TextView g;
     private RadioButton oneStore;
@@ -219,11 +212,16 @@ public class StoreResultsActivity extends AppCompatActivity {
 
 
         if (threeStores.isChecked()) {
+
             buildList(); //build the whole list
+
+            Toast.makeText(this, "Three stores list selected", Toast.LENGTH_SHORT).show();
         }
 
 
         if (twoStores.isChecked()) {
+            Toast.makeText(this, "Two stores list selected", Toast.LENGTH_SHORT).show();
+
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
                 //based on individual subtotal
                 if (shawsSTotal < priceChSTotal && shawsSTotal < costcoSTotal) {
@@ -253,6 +251,8 @@ public class StoreResultsActivity extends AppCompatActivity {
 
 
         if (oneStore.isChecked()) {
+            Toast.makeText(this, "One store list selected", Toast.LENGTH_SHORT).show();
+
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
                 //based on individual subtotal
 
