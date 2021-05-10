@@ -18,5 +18,7 @@
     <string name="radioThreeStores">3</string>
     <string name="updateBtnText">UPDATE</string>
     <string name="home_pageBtnTeaxt">HOME PAGE</string>
+    <string name="add_item_here">Add Item Here</string>
+    <string name="next_page">Next Page</string>
 
 </resources>

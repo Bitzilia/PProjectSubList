@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="center"
-        android:hint="Add Item Here"
+        android:hint="@string/add_item_here"
         android:importantForAutofill="no"
         android:inputType="text"
         android:paddingBottom="8dp" />
@@ -35,9 +35,9 @@
 
             <TableLayout
                 android:id="@+id/current_items_table"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </HorizontalScrollView>
     </ScrollView>
 
@@ -53,6 +53,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:onClick="nextPageButton"
-        android:text="Next Page" />
+        android:text="@string/next_page" />
 
 </LinearLayout>
