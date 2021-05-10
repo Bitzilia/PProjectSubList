@@ -12,5 +12,11 @@
 
     <string name="confirm_delete_item_text">Confirm</string>
     <string name="confirm_delete_item_message">Do want to remove</string>
+    <string name="numStoresView">#STORES</string>
+    <string name="radioOneStore">1</string>
+    <string name="radioTwoStores">2</string>
+    <string name="radioThreeStores">3</string>
+    <string name="updateBtnText">UPDATE</string>
+    <string name="home_pageBtnTeaxt">HOME PAGE</string>
 
 </resources>
