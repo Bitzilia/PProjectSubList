@@ -13,6 +13,7 @@
         android:ems="10"
         android:gravity="center"
         android:hint="@string/add_item_here"
+        android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="text"
         android:paddingBottom="8dp" />

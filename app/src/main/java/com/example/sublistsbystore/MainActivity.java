@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "shoparound.db")
                 .allowMainThreadQueries()
@@ -52,8 +54,17 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         requestedItemDAO = db.requestedItemDAO();
         itemDAO = db.itemDAO();
-        setContentView(R.layout.activity_main);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
+
+        EditText itemNameInput = findViewById(R.id.user_text_input);
+        itemNameInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                addItemBtnClicked(v);
+                return false;
+            }
+        });
+
         buildItemTable();
     }
 
@@ -61,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
      * creates list of items and adds items to array
      * @param name
      */
-    public void addItem(String name) {
+    public void
+    addItem(String name) {
         if (itemDAO.get(name) == null) {
             itemDAO.insertItem(new Item(name));
         }
