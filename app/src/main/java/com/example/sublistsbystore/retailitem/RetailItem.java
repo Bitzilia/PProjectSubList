@@ -3,6 +3,9 @@ package com.example.sublistsbystore.retailitem;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
+/**
+ * Represents a
+ */
 @Entity(tableName = "RetailItem",
         primaryKeys = {"itemID", "storeID"})
 

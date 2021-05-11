@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "shoparound.db")
+        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "usershoparound.db")
+                .createFromAsset("shoparound.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
