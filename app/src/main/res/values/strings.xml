@@ -5,13 +5,13 @@
     <string name="clear_list_button_text">Clear All Items</string>
 
     <string name="successful_add">Item was successfully added!</string>
-    <string name="unsuccessful_add">Failed to add Item!</string>
+    <string name="unsuccessful_add">Item name must not be empty</string>
 
     <string name="confirm_clear_list_text">Confirm</string>
     <string name="confirm_clear_list_message">Do you really want to clear this list?</string>
 
     <string name="confirm_delete_item_text">Confirm</string>
-    <string name="confirm_delete_item_message">Do want to remove %1s?</string>
+    <string name="confirm_delete_item_message">Do you want to remove \"%1s\"?</string>
 
     <string name="numStoresView">#STORES</string>
     <string name="radioOneStore">1</string>
@@ -19,7 +19,7 @@
     <string name="radioThreeStores">3</string>
     <string name="updateBtnText">UPDATE</string>
     <string name="home_pageBtnTeaxt">HOME PAGE</string>
-    <string name="add_item_here">Add Item Here</string>
+    <string name="add_item_here">Enter item name here</string>
     <string name="next_page">Next Page</string>
 
 </resources>
