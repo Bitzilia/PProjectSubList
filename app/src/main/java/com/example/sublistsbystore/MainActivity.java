@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.confirm_delete_item_text))
-                .setMessage(getString(R.string.confirm_delete_item_message) + " \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
+                //See: https://developer.android.com/guide/topics/resources/string-resource#formatting-strings
+                .setMessage(getString(R.string.confirm_delete_item_message, itemDAO.get(request.getItemID()).getItemName()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

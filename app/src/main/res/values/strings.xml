@@ -11,7 +11,8 @@
     <string name="confirm_clear_list_message">Do you really want to clear this list?</string>
 
     <string name="confirm_delete_item_text">Confirm</string>
-    <string name="confirm_delete_item_message">Do want to remove</string>
+    <string name="confirm_delete_item_message">Do want to remove %1s?</string>
+
     <string name="numStoresView">#STORES</string>
     <string name="radioOneStore">1</string>
     <string name="radioTwoStores">2</string>
