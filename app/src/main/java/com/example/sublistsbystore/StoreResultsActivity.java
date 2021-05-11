@@ -29,6 +29,7 @@ public class StoreResultsActivity extends AppCompatActivity {
     private HashMap<String, Double> shawsRequest = new HashMap<>();
     private HashMap<String, Double> priceChopperRequest = new HashMap<>();
     private HashMap<String, Double> costcoRequest = new HashMap<>();
+    private HashMap<String, Double> dualCanceledStores = new HashMap<>();
     private List<String> shopInput = new ArrayList<>();
     private List<String> notExistItems = new ArrayList<>();
     private List<String> shawsCanceled = new ArrayList<>();
@@ -71,7 +72,6 @@ public class StoreResultsActivity extends AppCompatActivity {
         if (!StaticData.nameQuantityFrmDB.isEmpty()) {
             for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
                 String key = entry.getKey();
-                //int value = entry.getValue();
                 shopInput.add(key);
             }
         }
@@ -196,6 +196,9 @@ public class StoreResultsActivity extends AppCompatActivity {
             Toast.makeText(this, "Three stores list selected", Toast.LENGTH_SHORT).show();
         }
         if (twoStores.isChecked()) {
+            shawsCanceled.clear();
+            priceChCanceled.clear();
+            costcoCanceled.clear();
             Toast.makeText(this, "Two stores list selected", Toast.LENGTH_SHORT).show();
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
                 //based on individual subtotals
@@ -320,50 +323,170 @@ public class StoreResultsActivity extends AppCompatActivity {
             }
         }
         if (oneStore.isChecked()) {
+            shawsCanceled.clear();
+            priceChCanceled.clear();
+            costcoCanceled.clear();
+            dualCanceledStores.clear();
             Toast.makeText(this, "One store list selected", Toast.LENGTH_SHORT).show();
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
                 //based on individual subtotal
                 if (shawsSTotal > priceChSTotal && shawsSTotal > costcoSTotal) {
+                    //START Saving/retrieving items
+                    dualCanceledStores.putAll(priceChopperRequest);
+                    dualCanceledStores.putAll(costcoRequest);
+                    for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(shawsInventory.containsKey(key)){
+                            shawsRequest.put(key,shawsInventory.get(key));
+                        }
+                    }
+                    for (Map.Entry<String, Double> entry : shawsRequest.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(dualCanceledStores.containsKey(key)){
+                            dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    //END Saving/retrieving items
                     priceChopperRequest.clear();
                     costcoRequest.clear();
                     buildList();
+                    //TODO printing canceled items for each
                 } else if (priceChSTotal > costcoSTotal) {
+                    //START Saving/retrieving items
+                    dualCanceledStores.putAll(shawsRequest);
+                    dualCanceledStores.putAll(costcoRequest);
+                    for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(priceChopperInventory.containsKey(key)){
+                            priceChopperRequest.put(key,priceChopperInventory.get(key));
+                            //dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(dualCanceledStores.containsKey(key)){
+                            dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    //END Saving/retrieving items
                     costcoRequest.clear();
                     shawsRequest.clear();
                     buildList();
+                    //TODO printing canceled items for each
                 } else {
+                    //START Saving/retrieving items
+                    dualCanceledStores.putAll(priceChopperRequest);
+                    dualCanceledStores.putAll(shawsRequest);
+                    for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(costcoInventory.containsKey(key)){
+                            costcoRequest.put(key,costcoInventory.get(key));
+                            //dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(dualCanceledStores.containsKey(key)){
+                            dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    //END Saving/retrieving items
                     priceChopperRequest.clear();
                     shawsRequest.clear();
                     buildList();
+                    //TODO printing canceled items for each
                 }
             } else {
                 //based on # of items
                 if (shawsSize > priceChSize && shawsSize > costcoSize) {
+                    //START Saving/retrieving items
+                    dualCanceledStores.putAll(priceChopperRequest);
+                    dualCanceledStores.putAll(costcoRequest);
+                    for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(shawsInventory.containsKey(key)){
+                            shawsRequest.put(key,shawsInventory.get(key));
+                            //dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    for (Map.Entry<String, Double> entry : shawsRequest.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(dualCanceledStores.containsKey(key)){
+                            dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    //END Saving/retrieving items
                     priceChopperRequest.clear();
                     costcoRequest.clear();
                     buildList();
+                    //TODO printing canceled items for each
                 } else if (priceChSize > costcoSize) {
+                    //START Saving/retrieving items
+                    dualCanceledStores.putAll(shawsRequest);
+                    dualCanceledStores.putAll(costcoRequest);
+                    for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(priceChopperInventory.containsKey(key)){
+                            priceChopperRequest.put(key,priceChopperInventory.get(key));
+                            //dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(dualCanceledStores.containsKey(key)){
+                            dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    //END Saving/retrieving items
                     costcoRequest.clear();
                     shawsRequest.clear();
                     buildList();
+                    //TODO printing canceled items for each
                 } else {
+                    //START Saving/retrieving items
+                    dualCanceledStores.putAll(priceChopperRequest);
+                    dualCanceledStores.putAll(shawsRequest);
+                    for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(costcoInventory.containsKey(key)){
+                            costcoRequest.put(key,costcoInventory.get(key));
+                            //dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        if(dualCanceledStores.containsKey(key)){
+                            dualCanceledStores.remove(key,value);
+                        }
+                    }
+                    //END Saving/retrieving items
                     priceChopperRequest.clear();
                     shawsRequest.clear();
                     buildList();
+                    //TODO printing canceled items for each
                 }
             }
+            //p
         }
+
         prepare1();
         prepare2();
     }
 
 
-    private void retrieve(HashMap<String, Double> sub){
-        for (Map.Entry<String, Double> entry : sub.entrySet()) {
-            String key = entry.getKey();
-            Double value = entry.getValue();
-        }
-    }
+
 
     private void buildList() {
         TableLayout table = findViewById(R.id.table);
