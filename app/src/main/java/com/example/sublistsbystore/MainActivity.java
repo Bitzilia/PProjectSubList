@@ -162,14 +162,14 @@ public class MainActivity extends AppCompatActivity {
         dltButton.setImageDrawable(deleteImage);
         dltButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                promptDeleteItem(item);
+            public void onClick(View view) {
+                promptDeleteItem(item, view);
             }
         });
         return dltButton;
     }
 
-    private void promptDeleteItem(RequestedItem request) {
+    private void promptDeleteItem(RequestedItem request, View view) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.confirm_delete_item_text))
@@ -179,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         requestedItemDAO.removeRequestedItem(request);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         buildItemTable();
                     }
                 })
