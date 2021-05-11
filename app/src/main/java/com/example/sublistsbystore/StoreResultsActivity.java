@@ -209,10 +209,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(priceChopperInventory.containsKey(key)){
                             priceChopperRequest.put(key,priceChopperInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else if(costcoInventory.containsKey(key)){
                             costcoRequest.put(key,costcoInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else{
                             shawsCanceled.add(key);
                         }
@@ -221,6 +219,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, shawsCanceled.toString(), Toast.LENGTH_SHORT).show();
                 } else if (priceChSTotal < costcoSTotal && priceChSTotal < shawsSTotal) {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
@@ -228,10 +227,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(shawsInventory.containsKey(key)){
                             shawsRequest.put(key,shawsInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else if(costcoInventory.containsKey(key)){
                             costcoRequest.put(key,costcoInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else{
                             priceChCanceled.add(key);
                         }
@@ -240,6 +237,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     priceChopperRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, priceChCanceled.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
@@ -247,10 +245,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(shawsInventory.containsKey(key)){
                             shawsRequest.put(key,shawsInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else if(priceChopperInventory.containsKey(key)){
                             priceChopperRequest.put(key,priceChopperInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else{
                             costcoCanceled.add(key);
                         }
@@ -259,6 +255,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     costcoRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, costcoCanceled.toString(), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 //based on # of items
@@ -269,10 +266,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(priceChopperInventory.containsKey(key)){
                             priceChopperRequest.put(key,priceChopperInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else if(costcoInventory.containsKey(key)){
                             costcoRequest.put(key,costcoInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else{
                             shawsCanceled.add(key);
                         }
@@ -281,6 +276,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, shawsCanceled.toString(), Toast.LENGTH_SHORT).show();
                 } else if (priceChSize < costcoSize && priceChSize < shawsSize) {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
@@ -288,10 +284,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(shawsInventory.containsKey(key)){
                             shawsRequest.put(key,shawsInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else if(costcoInventory.containsKey(key)){
                             costcoRequest.put(key,costcoInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else{
                             priceChCanceled.add(key);
                         }
@@ -300,6 +294,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     priceChopperRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, priceChCanceled.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
@@ -307,10 +302,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(shawsInventory.containsKey(key)){
                             shawsRequest.put(key,shawsInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else if(priceChopperInventory.containsKey(key)){
                             priceChopperRequest.put(key,priceChopperInventory.get(key));
-                            //shawsRequest.remove(key,value);
                         }else{
                             costcoCanceled.add(key);
                         }
@@ -319,13 +312,12 @@ public class StoreResultsActivity extends AppCompatActivity {
                     costcoRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, costcoCanceled.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         }
         if (oneStore.isChecked()) {
-            shawsCanceled.clear();
-            priceChCanceled.clear();
-            costcoCanceled.clear();
+
             dualCanceledStores.clear();
             Toast.makeText(this, "One store list selected", Toast.LENGTH_SHORT).show();
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
@@ -345,7 +337,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         if(dualCanceledStores.containsKey(key)){
-                            dualCanceledStores.remove(key,value);
+                            dualCanceledStores.remove(key);
                         }
                     }
                     //END Saving/retrieving items
@@ -353,6 +345,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     costcoRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, dualCanceledStores.toString(), Toast.LENGTH_SHORT).show();
                 } else if (priceChSTotal > costcoSTotal) {
                     //START Saving/retrieving items
                     dualCanceledStores.putAll(shawsRequest);
@@ -362,14 +355,13 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(priceChopperInventory.containsKey(key)){
                             priceChopperRequest.put(key,priceChopperInventory.get(key));
-                            //dualCanceledStores.remove(key,value);
                         }
                     }
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         if(dualCanceledStores.containsKey(key)){
-                            dualCanceledStores.remove(key,value);
+                            dualCanceledStores.remove(key );
                         }
                     }
                     //END Saving/retrieving items
@@ -377,6 +369,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, dualCanceledStores.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     //START Saving/retrieving items
                     dualCanceledStores.putAll(priceChopperRequest);
@@ -386,14 +379,13 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(costcoInventory.containsKey(key)){
                             costcoRequest.put(key,costcoInventory.get(key));
-                            //dualCanceledStores.remove(key,value);
                         }
                     }
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         if(dualCanceledStores.containsKey(key)){
-                            dualCanceledStores.remove(key,value);
+                            dualCanceledStores.remove(key );
                         }
                     }
                     //END Saving/retrieving items
@@ -401,6 +393,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, dualCanceledStores.toString(), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 //based on # of items
@@ -413,14 +406,13 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(shawsInventory.containsKey(key)){
                             shawsRequest.put(key,shawsInventory.get(key));
-                            //dualCanceledStores.remove(key,value);
                         }
                     }
                     for (Map.Entry<String, Double> entry : shawsRequest.entrySet()) {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         if(dualCanceledStores.containsKey(key)){
-                            dualCanceledStores.remove(key,value);
+                            dualCanceledStores.remove(key );
                         }
                     }
                     //END Saving/retrieving items
@@ -428,6 +420,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     costcoRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, dualCanceledStores.toString(), Toast.LENGTH_SHORT).show();
                 } else if (priceChSize > costcoSize) {
                     //START Saving/retrieving items
                     dualCanceledStores.putAll(shawsRequest);
@@ -437,14 +430,13 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(priceChopperInventory.containsKey(key)){
                             priceChopperRequest.put(key,priceChopperInventory.get(key));
-                            //dualCanceledStores.remove(key,value);
                         }
                     }
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         if(dualCanceledStores.containsKey(key)){
-                            dualCanceledStores.remove(key,value);
+                            dualCanceledStores.remove(key );
                         }
                     }
                     //END Saving/retrieving items
@@ -452,6 +444,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, dualCanceledStores.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     //START Saving/retrieving items
                     dualCanceledStores.putAll(priceChopperRequest);
@@ -461,14 +454,13 @@ public class StoreResultsActivity extends AppCompatActivity {
                         Double value = entry.getValue();
                         if(costcoInventory.containsKey(key)){
                             costcoRequest.put(key,costcoInventory.get(key));
-                            //dualCanceledStores.remove(key,value);
                         }
                     }
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         if(dualCanceledStores.containsKey(key)){
-                            dualCanceledStores.remove(key,value);
+                            dualCanceledStores.remove(key );
                         }
                     }
                     //END Saving/retrieving items
@@ -476,6 +468,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
+                    Toast.makeText(this, dualCanceledStores.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
             //p
@@ -484,9 +477,6 @@ public class StoreResultsActivity extends AppCompatActivity {
         prepare1();
         prepare2();
     }
-
-
-
 
     private void buildList() {
         TableLayout table = findViewById(R.id.table);
