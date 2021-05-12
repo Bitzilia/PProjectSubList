@@ -5,6 +5,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.sublistsbystore.requestedItem.RequestedItem;
+
 import java.util.List;
 
 @Dao
@@ -14,6 +16,9 @@ public interface RetailItemDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertRetailItem(RetailItem r);
+
+    @Query("SELECT * from RetailItem")
+    public List<RetailItem> getAllRetailItems();
 
     @Query("SELECT * from RetailItem " +
             "where itemID in (" +

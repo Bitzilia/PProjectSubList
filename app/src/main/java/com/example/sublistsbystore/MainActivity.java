@@ -26,6 +26,7 @@ import com.example.sublistsbystore.item.Item;
 import com.example.sublistsbystore.item.ItemDAO;
 import com.example.sublistsbystore.requestedItem.RequestedItem;
 import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
+import com.example.sublistsbystore.retailitem.RetailItem;
 import com.example.sublistsbystore.retailitem.RetailItemDAO;
 import com.example.sublistsbystore.store.StoreDAO;
 
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             int itemQuantity = r.getQuantity();
             StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
         }
+
         startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
 
