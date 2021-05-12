@@ -23,5 +23,5 @@ public interface RetailItemDAO {
     @Query("SELECT * from RetailItem " +
             "where itemID in (" +
                 "SELECT itemID FROM requesteditem)")
-    public List<RetailItem> getRequestedRetailItems();
+    public List<RetailItem> getRequestedRetailItapems();
 }

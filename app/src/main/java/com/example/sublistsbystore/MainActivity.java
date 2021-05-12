@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "usershoparound.db")
+        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "usrshoparound.db")
                 .createFromAsset("shoparound.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
