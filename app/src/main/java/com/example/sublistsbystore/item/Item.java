@@ -6,8 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 /**
- * Represents an Item
- *
+ * Represents a specific type of Item
  * uses Room's Entity annotation (see http://marker.to/KZyJdO)
  */
 @Entity(tableName = "Item")

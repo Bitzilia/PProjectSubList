@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -45,15 +46,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "shoparound.db")
+        db = Room.databaseBuilder(getApplicationContext(), ShoparoundDB.class, "usershoparound.db")
+                .createFromAsset("shoparound.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
         requestedItemDAO = db.requestedItemDAO();
         itemDAO = db.itemDAO();
-        setContentView(R.layout.activity_main);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
+
+        EditText itemNameInput = findViewById(R.id.user_text_input);
+        itemNameInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                addItemBtnClicked(v);
+                return false;
+            }
+        });
+
         buildItemTable();
     }
 
@@ -61,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
      * creates list of items and adds items to array
      * @param name
      */
-    public void addItem(String name) {
+    public void
+    addItem(String name) {
         if (itemDAO.get(name) == null) {
             itemDAO.insertItem(new Item(name));
         }
@@ -162,22 +175,25 @@ public class MainActivity extends AppCompatActivity {
         dltButton.setImageDrawable(deleteImage);
         dltButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                promptDeleteItem(item);
+            public void onClick(View view) {
+                promptDeleteItem(item, view);
             }
         });
         return dltButton;
     }
 
-    private void promptDeleteItem(RequestedItem request) {
+    private void promptDeleteItem(RequestedItem request, View view) {
         // credit: https://stackoverflow.com/a/5127506
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.confirm_delete_item_text))
-                .setMessage(getString(R.string.confirm_delete_item_message) + " \"" + itemDAO.get(request.getItemID()).getItemName() + "\"?")
+                //See: https://developer.android.com/guide/topics/resources/string-resource#formatting-strings
+                .setMessage(getString(R.string.confirm_delete_item_message, itemDAO.get(request.getItemID()).getItemName()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         requestedItemDAO.removeRequestedItem(request);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         buildItemTable();
                     }
                 })
