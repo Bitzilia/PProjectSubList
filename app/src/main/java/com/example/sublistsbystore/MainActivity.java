@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 .fallbackToDestructiveMigration()
                 .build();
         requestedItemDAO = db.requestedItemDAO();
+        retailItemDAO = db.retailItemDAO();
         itemDAO = db.itemDAO();
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
 
