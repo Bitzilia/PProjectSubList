@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
 
-
     /**
      * clears the list of all items
      * @param view
