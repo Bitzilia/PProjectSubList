@@ -116,6 +116,21 @@ public class MainActivity extends AppCompatActivity {
             int itemQuantity = r.getQuantity();
             StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
         }
+        for(RetailItem r : retailItemDAO.getAllRetailItems()){
+            String itemName;
+            Double itemPrice;
+            itemName = itemDAO.get(r.getItemID()).getItemName();
+            itemPrice = r.getPrice();
+            if(r.getStoreID()==1){
+                StaticData.shawsInventoryFrmDB.put(itemName,itemPrice);
+            }
+            if(r.getStoreID()==2){
+                StaticData.costcoInventoryFrmDB.put(itemName,itemPrice);
+            }
+            if(r.getStoreID()==3){
+                StaticData.priceChopperInventoryFrmDB.put(itemName,itemPrice);
+            }
+        }
 
         startActivity(new Intent(getApplicationContext(), StoreResultsActivity.class));
     }
