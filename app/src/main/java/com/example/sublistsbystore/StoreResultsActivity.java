@@ -78,7 +78,10 @@ public class StoreResultsActivity extends AppCompatActivity {
     }
 
     private void fillInventory() {
-        shawsInventory.put("milk", 3.99);
+        shawsInventory.putAll(StaticData.shawsInventoryFrmDB);
+        costcoInventory.putAll(StaticData.costcoInventoryFrmDB);
+        priceChopperInventory.putAll(StaticData.priceChopperInventoryFrmDB);
+        /*shawsInventory.put("milk", 3.99);
         shawsInventory.put("eggs", 3.99);
         shawsInventory.put("bread", 3.99);
         shawsInventory.put("berry", 1.99);
@@ -91,7 +94,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         costcoInventory.put("milk", 5.99);
         costcoInventory.put("eggs", 1.99);
         costcoInventory.put("oil", 3.99);
-        costcoInventory.put("rice", 3.99);
+        costcoInventory.put("rice", 3.99);*/
     }
 
     /**

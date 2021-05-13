@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void nextPageButton(View view) {
         StaticData.nameQuantityFrmDB.clear();
+        StaticData.shawsInventoryFrmDB.clear();
+        StaticData.costcoInventoryFrmDB.clear();
+        StaticData.priceChopperInventoryFrmDB.clear();
 
         for (RequestedItem r : requestedItemDAO.getAllRequestedItems()) {
             itemName = itemDAO.get(r.getItemID()).getItemName();
