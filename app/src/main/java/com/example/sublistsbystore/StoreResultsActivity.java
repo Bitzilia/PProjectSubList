@@ -17,7 +17,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -575,7 +574,11 @@ public class StoreResultsActivity extends AppCompatActivity {
             row.addView(makeTV2("        " + quantity));
             box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    row.setBackgroundColor(Color.GRAY);
+                    if (isChecked){
+                        row.setBackgroundColor(Color.GRAY);
+                    }else{
+                        row.setBackgroundColor(Color.TRANSPARENT);
+                    }
                 }
             });
             tab.addView(row);
