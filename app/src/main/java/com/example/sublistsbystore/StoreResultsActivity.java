@@ -17,6 +17,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -524,7 +526,8 @@ public class StoreResultsActivity extends AppCompatActivity {
                 table.addView(row);
             }
         }
-        g.setText("GRAND TOTAL: $ " + Math.round(grandT * 100.0) / 100.0);
+        DecimalFormat currency = new DecimalFormat("'$'0.00");
+        g.setText("GRAND TOTAL: " + currency.format(Math.round(grandT * 100.0) / 100.0));
     }
 
     private TextView makeTV(String word) {
@@ -566,8 +569,9 @@ public class StoreResultsActivity extends AppCompatActivity {
             CheckBox box = new CheckBox(getApplicationContext());
             box.setText("");
             row.addView(box);
-            row.addView(makeTV2("   " + key));
-            row.addView(makeTV2("    " + value));
+            row.addView(makeTV2("  " + key));
+            DecimalFormat currency = new DecimalFormat("'$'0.00");
+            row.addView(makeTV2("  "+currency.format(Math.round(value * 100.0) / 100.0)));
             row.addView(makeTV2("        " + quantity));
             box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -578,8 +582,9 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
         grandT += total;
         TableRow rowT = new TableRow(this.getApplicationContext());
-        rowT.addView(makeTV("COST: $ "));
-        rowT.addView(makeTV(String.valueOf(Math.round(total * 100.0) / 100.0)));
+        rowT.addView(makeTV("COST:"));
+        DecimalFormat currency = new DecimalFormat("'$'0.00");
+        rowT.addView(makeTV(currency.format(Math.round(total * 100.0) / 100.0)));
         tab.addView(rowT);
     }
 
