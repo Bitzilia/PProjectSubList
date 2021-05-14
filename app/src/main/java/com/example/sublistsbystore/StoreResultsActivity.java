@@ -52,13 +52,6 @@ public class StoreResultsActivity extends AppCompatActivity {
         threeStores = findViewById(R.id.threeST);
         threeStores.setChecked(true);
 
-        //  from customer
-        /*shopInput.add("milk");
-        shopInput.add("bread");
-        shopInput.add("rice");
-        shopInput.add("oil");
-        shopInput.add("Bicycle");
-        shopInput.add("book");*/
 
         shopInputFillFromDB();
         fillInventory();
@@ -82,20 +75,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         shawsInventory.putAll(StaticData.shawsInventoryFrmDB);
         costcoInventory.putAll(StaticData.costcoInventoryFrmDB);
         priceChopperInventory.putAll(StaticData.priceChopperInventoryFrmDB);
-        /*shawsInventory.put("milk", 3.99);
-        shawsInventory.put("eggs", 3.99);
-        shawsInventory.put("bread", 3.99);
-        shawsInventory.put("berry", 1.99);
 
-        priceChopperInventory.put("milk", 4.99);
-        priceChopperInventory.put("eggs", 3.99);
-        priceChopperInventory.put("bread", 2.99);
-        priceChopperInventory.put("rice", 2.99);
-
-        costcoInventory.put("milk", 5.99);
-        costcoInventory.put("eggs", 1.99);
-        costcoInventory.put("oil", 3.99);
-        costcoInventory.put("rice", 3.99);*/
     }
 
     /**
@@ -521,8 +501,23 @@ public class StoreResultsActivity extends AppCompatActivity {
             for (int i = 0; i < notExistItems.size(); i++) {
                 row = new TableRow(this.getApplicationContext());
                 row.addView(makeTV("Item(" + (i + 1) + "): "));
-                row.addView(makeTV2(notExistItems.get(i)));
+                //table.addView(row);
+                /****/
+                //TableRow rowX = new TableRow(this.getApplicationContext());
+                TextView viewX = new TextView(this.getApplicationContext());
+
+                TableRow.LayoutParams params = new TableRow.LayoutParams(
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        TableRow.LayoutParams.WRAP_CONTENT);
+                params.span = 3;
+                viewX.setText(notExistItems.get(i));
+                viewX.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+                viewX.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
+                viewX.setLayoutParams(params);
+                row.addView(viewX, params);
                 table.addView(row);
+                /****/
+
             }
         }
         DecimalFormat currency = new DecimalFormat("'$'0.00");
@@ -541,7 +536,6 @@ public class StoreResultsActivity extends AppCompatActivity {
     private TextView makeTV2(String word) {
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
-        //view.setTextColor(0x000000ff);
         view.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
         return view;
