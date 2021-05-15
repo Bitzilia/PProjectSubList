@@ -41,6 +41,9 @@ public class StoreResultsActivity extends AppCompatActivity {
     private RadioButton oneStore;
     private RadioButton twoStores;
     private RadioButton threeStores;
+    public TableLayout table;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         oneStore = findViewById(R.id.oneST);
         twoStores = findViewById(R.id.twoST);
         threeStores = findViewById(R.id.threeST);
+        table = findViewById(R.id.table);
         threeStores.setChecked(true);
 
 
@@ -202,8 +206,10 @@ public class StoreResultsActivity extends AppCompatActivity {
                     /**END Saving/retrieving items***/
                     shawsRequest.clear();
                     buildList();
-                    //TODO printing canceled items for each
-                    Toast.makeText(this, shawsCanceled.toString(), Toast.LENGTH_SHORT).show();
+                    //TODO printing canceled items for each#
+                    if(!shawsCanceled.isEmpty()){
+                        printCanceled2Stores("SHAWS EXCLUSIVE",shawsCanceled);
+                    }
                 } else if (priceChSTotal < costcoSTotal && priceChSTotal < shawsSTotal) {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
@@ -221,7 +227,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                     priceChopperRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
-                    Toast.makeText(this, priceChCanceled.toString(), Toast.LENGTH_SHORT).show();
+                    if(!priceChCanceled.isEmpty()){
+                        printCanceled2Stores("P. CHPR EXCLUSIVE",priceChCanceled);
+                    }
                 } else {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
@@ -239,7 +247,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                     costcoRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
-                    Toast.makeText(this, costcoCanceled.toString(), Toast.LENGTH_SHORT).show();
+                    if(!costcoCanceled.isEmpty()){
+                        printCanceled2Stores("COSTCO EXCLUSIVE",costcoCanceled);
+                    }
                 }
             } else {
                 //based on # of items
@@ -260,7 +270,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                     shawsRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
-                    Toast.makeText(this, shawsCanceled.toString(), Toast.LENGTH_SHORT).show();
+                    if(!shawsCanceled.isEmpty()){
+                        printCanceled2Stores("SHAWS EXCLUSIVE",shawsCanceled);
+                    }
                 } else if (priceChSize < costcoSize && priceChSize < shawsSize) {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
@@ -278,7 +290,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                     priceChopperRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
-                    Toast.makeText(this, priceChCanceled.toString(), Toast.LENGTH_SHORT).show();
+                    if(!priceChCanceled.isEmpty()){
+                        printCanceled2Stores("P. CHPR EXCLUSIVE",priceChCanceled);
+                    }
                 } else {
                     /**START Saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
@@ -296,7 +310,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                     costcoRequest.clear();
                     buildList();
                     //TODO printing canceled items for each
-                    Toast.makeText(this, costcoCanceled.toString(), Toast.LENGTH_SHORT).show();
+                    if(!costcoCanceled.isEmpty()){
+                        printCanceled2Stores("COSTCO EXCLUSIVE",costcoCanceled);
+                    }
                 }
             }
         }
@@ -457,13 +473,47 @@ public class StoreResultsActivity extends AppCompatActivity {
             }
             //p
         }
-
         prepare1();
         prepare2();
     }
 
+    private void printCanceled2Stores(String s, List<String> l){
+        TableRow space = new TableRow(this.getApplicationContext());
+        TextView sp = new TextView(this.getApplicationContext());
+        sp.setText("SPACE");
+        sp.setTextColor(0x000000ff);
+        space.addView(sp);
+        table.addView(space);
+
+        TableRow row = new TableRow(this.getApplicationContext());
+        TextView viewX = new TextView(this.getApplicationContext());
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT);
+        params.span = 3;
+        viewX.setText(s);
+        viewX.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
+        viewX.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
+        viewX.setTextColor(0xff0000ff);
+        viewX.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size));
+        viewX.setLayoutParams(params);
+        row.addView(viewX, params);
+        table.addView(row);
+        for (int i = 0; i < l.size(); i++) {
+
+            TableRow row2 = new TableRow(this.getApplicationContext());
+            row2.addView(makeTV("Item(" + (i + 1) + "): "));
+            row2.addView(makeTV2(l.get(i)));
+            table.addView(row2);
+
+           }
+    }
+
+
+
+
     private void buildList() {
-        TableLayout table = findViewById(R.id.table);
+        //TableLayout table = findViewById(R.id.table);
         table.removeAllViews();
         if (!shawsRequest.isEmpty()) {
             subList(shawsRequest, table, "SHAWS");
@@ -540,6 +590,8 @@ public class StoreResultsActivity extends AppCompatActivity {
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
         return view;
     }
+
+
 
     private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
         double total = 0;
