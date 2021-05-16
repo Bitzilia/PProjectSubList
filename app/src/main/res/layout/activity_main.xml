@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/user_text_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,10 @@
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="text"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp">
+
+        <requestFocus />
+    </AutoCompleteTextView>
 
     <Button
         android:id="@+id/add_item_btn"
