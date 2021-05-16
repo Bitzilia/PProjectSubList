@@ -537,23 +537,43 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
         //This is the non exist items display
         if (!notExistItems.isEmpty()) {
+
             TableRow row = new TableRow(this.getApplicationContext());
             row.addView(makeTV("N/A"));
             table.addView(row);
+            TableRow secondRow = new TableRow(this.getApplicationContext());
+            secondRow.addView(makeTV(" CHK "));
+            secondRow.addView(makeTV(" NAME       "));
+            secondRow.addView(makeTV("             "));
+            secondRow.addView(makeTV("    QTY "));
+            table.addView(secondRow);
             for (int i = 0; i < notExistItems.size(); i++) {
-                row = new TableRow(this.getApplicationContext());
-                row.addView(makeTV("Item(" + (i + 1) + "): "));
+                int quantity = StaticData.nameQuantityFrmDB.get(notExistItems.get(i));
+                TableRow rowNA = new TableRow(this.getApplicationContext());
+                CheckBox box = new CheckBox(getApplicationContext());
+                box.setText("");
+                rowNA.addView(box);
                 TextView viewX = new TextView(this.getApplicationContext());
                 TableRow.LayoutParams params = new TableRow.LayoutParams(
                         TableRow.LayoutParams.WRAP_CONTENT,
                         TableRow.LayoutParams.WRAP_CONTENT);
-                params.span = 3;
+                params.span = 2;
                 viewX.setText(notExistItems.get(i));
                 viewX.setPadding(0, 0, getResources().getDimensionPixelSize(R.dimen.table_padding), 0);
                 viewX.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
                 viewX.setLayoutParams(params);
-                row.addView(viewX, params);
-                table.addView(row);
+                rowNA.addView(viewX, params);
+                rowNA.addView(makeTV2("        " + quantity));
+                box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked){
+                            rowNA.setBackgroundColor(Color.GRAY);
+                        }else{
+                            rowNA.setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                });
+                table.addView(rowNA);
             }
         }
         DecimalFormat currency = new DecimalFormat("'$'0.00");
@@ -585,7 +605,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         secondRow.addView(makeTV(" CHK "));
         secondRow.addView(makeTV(" NAME       "));
         secondRow.addView(makeTV(" PRICE       "));
-        secondRow.addView(makeTV(" QUANTITY "));
+        secondRow.addView(makeTV("    QTY "));
         tab.addView(secondRow);
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
             String key = entry.getKey();
