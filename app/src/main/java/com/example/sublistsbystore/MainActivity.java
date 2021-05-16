@@ -10,6 +10,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     ShoparoundDB db;
     float scale;
     String itemName;
+    String[] allItemNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,15 @@ public class MainActivity extends AppCompatActivity {
         itemDAO = db.itemDAO();
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
 
-        EditText itemNameInput = findViewById(R.id.user_text_input);
+//      credit:https://www.journaldev.com/9574/android-autocompletetextview-example-tutorial
+        List<RetailItem> temp = retailItemDAO.getAllRetailItems();
+        allItemNames = temp.stream().map(item -> itemDAO.get(item.getItemID()).getItemName()).distinct().toArray(String[]::new);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>
+                (this, android.R.layout.select_dialog_item, allItemNames);
+        AutoCompleteTextView itemNameInput = findViewById(R.id.user_text_input);
+        itemNameInput.setThreshold(1);
+        itemNameInput.setAdapter(adapter);
+
         itemNameInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -120,19 +131,19 @@ public class MainActivity extends AppCompatActivity {
             int itemQuantity = r.getQuantity();
             StaticData.nameQuantityFrmDB.put(itemName, itemQuantity);
         }
-        for(RetailItem r : retailItemDAO.getAllRetailItems()){
+        for (RetailItem r : retailItemDAO.getAllRetailItems()) {
             String itemName;
             Double itemPrice;
             itemName = itemDAO.get(r.getItemID()).getItemName();
             itemPrice = r.getPrice();
-            if(r.getStoreID()==1){
-                StaticData.shawsInventoryFrmDB.put(itemName,itemPrice);
+            if (r.getStoreID() == 1) {
+                StaticData.shawsInventoryFrmDB.put(itemName, itemPrice);
             }
-            if(r.getStoreID()==2){
-                StaticData.costcoInventoryFrmDB.put(itemName,itemPrice);
+            if (r.getStoreID() == 2) {
+                StaticData.costcoInventoryFrmDB.put(itemName, itemPrice);
             }
-            if(r.getStoreID()==3){
-                StaticData.priceChopperInventoryFrmDB.put(itemName,itemPrice);
+            if (r.getStoreID() == 3) {
+                StaticData.priceChopperInventoryFrmDB.put(itemName, itemPrice);
             }
         }
 
@@ -222,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private TextView makeTV(String item) {
-        //    TODO: set resources for text size and padding
         TextView listView = new TextView(this.getApplicationContext());
         listView.setTextColor(getResources().getColor(R.color.black));
         listView.setText(item);
