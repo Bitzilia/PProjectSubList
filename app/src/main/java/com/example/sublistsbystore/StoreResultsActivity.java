@@ -24,23 +24,23 @@ import java.util.List;
 import java.util.Map;
 
 public class StoreResultsActivity extends AppCompatActivity {
-    private HashMap<String, Double> shawsInventory = new HashMap<>();
-    private HashMap<String, Double> priceChopperInventory = new HashMap<>();
-    private HashMap<String, Double> costcoInventory = new HashMap<>();
-    private HashMap<String, Double> shawsRequest = new HashMap<>();
-    private HashMap<String, Double> priceChopperRequest = new HashMap<>();
-    private HashMap<String, Double> costcoRequest = new HashMap<>();
-    private HashMap<String, Double> dualCanceledStores = new HashMap<>();
-    private List<String> shopInput = new ArrayList<>();
-    private List<String> notExistItems = new ArrayList<>();
-    private List<String> shawsCanceled = new ArrayList<>();
-    private List<String> priceChCanceled = new ArrayList<>();
-    private List<String> costcoCanceled = new ArrayList<>();
-    private double grandT = 0;
-    private TextView g;
-    private RadioButton oneStore;
-    private RadioButton twoStores;
-    private RadioButton threeStores;
+    private HashMap<String, Double> shawsInventory = new HashMap<>();         //Shaws inventory
+    private HashMap<String, Double> priceChopperInventory = new HashMap<>();  //Price Chopper inventory
+    private HashMap<String, Double> costcoInventory = new HashMap<>();        //Costco inventory
+    private HashMap<String, Double> shawsRequest = new HashMap<>();           //Shaws available items
+    private HashMap<String, Double> priceChopperRequest = new HashMap<>();    //Price Chopper available items
+    private HashMap<String, Double> costcoRequest = new HashMap<>();          //Costco available items
+    private HashMap<String, Double> dualCanceledStores = new HashMap<>();     //Dropped items when selecting 1-store
+    private List<String> shopInput = new ArrayList<>();                       //Customer requested items
+    private List<String> notExistItems = new ArrayList<>();                   //N/A items (not exist)
+    private List<String> shawsCanceled = new ArrayList<>();                   //Dropped items (SHaws) when selecting 2-stores
+    private List<String> priceChCanceled = new ArrayList<>();                 //Dropped items (Price Chopper) when selecting 2-stores
+    private List<String> costcoCanceled = new ArrayList<>();                  //Dropped items (Costco) when selecting 2-stores
+    private double grandT = 0;                                                //Grand total
+    private TextView g;                                                       //TextView for grandTotal
+    private RadioButton oneStore;                                             //1-store radio button
+    private RadioButton twoStores;                                            //2-store radio button
+    private RadioButton threeStores;                                          //3-store radio button
     public TableLayout table;
 
     @Override
@@ -61,6 +61,9 @@ public class StoreResultsActivity extends AppCompatActivity {
         buildList();
     }
 
+    /**
+     * Get the requested customer's items from the DB into shopInput
+     */
     private void shopInputFillFromDB() {
         if (!StaticData.nameQuantityFrmDB.isEmpty()) {
             for (Map.Entry<String, Integer> entry : StaticData.nameQuantityFrmDB.entrySet()) {
@@ -70,6 +73,9 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get the stores inventories into corresponding arrays from DB
+     */
     private void fillInventory() {
         shawsInventory.putAll(StaticData.shawsInventoryFrmDB);
         costcoInventory.putAll(StaticData.costcoInventoryFrmDB);
@@ -78,20 +84,23 @@ public class StoreResultsActivity extends AppCompatActivity {
     }
 
     /**
-     * button to nav to next page
-     *
+     * button to navigate to home page
      * @param view
      */
     public void buttonOver(View view) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    //making subLists per store with customer's requests
+    /**
+     * Stage-1 making sublists per store using customer's request
+     */
     private void prepare1() {
+
         shawsRequest.clear();
         priceChopperRequest.clear();
         costcoRequest.clear();
         notExistItems.clear();
+
         for (int i = 0; i < shopInput.size(); i++) {
             String tmp = shopInput.get(i);
             if (shawsInventory.containsKey(tmp)) {
@@ -109,13 +118,18 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
     }
 
-    //finding/creating cheapest shopping list
+    /**
+     * Stage-2 shuffling the sublists to find the cheapest items per store among all three (or selected stores)
+     */
     private void prepare2() {
+
         for (int i = 0; i < shopInput.size(); i++) {
+
             String tmp = shopInput.get(i);
             Double shaws = null;
             Double chopper = null;
             Double costco = null;
+
             if (shawsRequest.containsKey(tmp)) {
                 shaws = shawsRequest.get(tmp);
             }
@@ -163,7 +177,12 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Build/rebuild the shopping list according to the # of stores selected
+     * @param v
+     */
     public void prepare3(View v) {
+
         grandT = 0;
         int shawsSize = shawsRequest.size();
         int priceChSize = priceChopperRequest.size();
@@ -171,19 +190,26 @@ public class StoreResultsActivity extends AppCompatActivity {
         double shawsSTotal = subTotal(shawsRequest);
         double priceChSTotal = subTotal(priceChopperRequest);
         double costcoSTotal = subTotal(costcoRequest);
+
+        //If 3-stores is selected build the whole list
         if (threeStores.isChecked()) {
-            buildList(); //build the whole list
+            buildList();
             Toast.makeText(this, "Three stores list selected", Toast.LENGTH_SHORT).show();
         }
+
+        //If 2-stores is selected build for 2-stores
         if (twoStores.isChecked()) {
+
             shawsCanceled.clear();
             priceChCanceled.clear();
             costcoCanceled.clear();
+
             Toast.makeText(this, "Two stores list selected", Toast.LENGTH_SHORT).show();
+
+            //Phase-1 flush and drop according to individual subTotals if # of items is equal in all 3-stores
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
-                //based on individual subtotals
                 if (shawsSTotal < priceChSTotal && shawsSTotal < costcoSTotal) {
-                    /**START Saving/retrieving items**/
+                    /**START saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : shawsRequest.entrySet()) {
                         String key = entry.getKey();
                         if(priceChopperInventory.containsKey(key)){
@@ -194,14 +220,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             shawsCanceled.add(key);
                         }
                     }
-                    /**END Saving/retrieving items***/
+                    /**END saving/retrieving items***/
                     shawsRequest.clear();
                     buildList();
                     if(!shawsCanceled.isEmpty()){
                         printCanceled2Stores("SHAWS EXCLUSIVE",shawsCanceled);
                     }
                 } else if (priceChSTotal < costcoSTotal && priceChSTotal < shawsSTotal) {
-                    /**START Saving/retrieving items**/
+                    /**START saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
                         String key = entry.getKey();
                         if(shawsInventory.containsKey(key)){
@@ -212,14 +238,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             priceChCanceled.add(key);
                         }
                     }
-                    /**END Saving/retrieving items***/
+                    /**END saving/retrieving items***/
                     priceChopperRequest.clear();
                     buildList();
                     if(!priceChCanceled.isEmpty()){
                         printCanceled2Stores("P. CHPR EXCLUSIVE",priceChCanceled);
                     }
                 } else {
-                    /**START Saving/retrieving items**/
+                    /**START saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
                         String key = entry.getKey();
                         if(shawsInventory.containsKey(key)){
@@ -230,7 +256,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                             costcoCanceled.add(key);
                         }
                     }
-                    /**END Saving/retrieving items***/
+                    /**END saving/retrieving items***/
                     costcoRequest.clear();
                     buildList();
                     if(!costcoCanceled.isEmpty()){
@@ -238,9 +264,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                //based on # of items
+                //Phase-2 flush and drop according to # of items among the stores
                 if (shawsSize < priceChSize && shawsSize < costcoSize) {
-                    /**START Saving/retrieving items**/
+                    /**START saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : shawsRequest.entrySet()) {
                         String key = entry.getKey();
                         if(priceChopperInventory.containsKey(key)){
@@ -251,14 +277,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             shawsCanceled.add(key);
                         }
                     }
-                    /**END Saving/retrieving items***/
+                    /**END saving/retrieving items***/
                     shawsRequest.clear();
                     buildList();
                     if(!shawsCanceled.isEmpty()){
                         printCanceled2Stores("SHAWS EXCLUSIVE",shawsCanceled);
                     }
                 } else if (priceChSize < costcoSize && priceChSize < shawsSize) {
-                    /**START Saving/retrieving items**/
+                    /**START saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : priceChopperRequest.entrySet()) {
                         String key = entry.getKey();
                         if(shawsInventory.containsKey(key)){
@@ -269,14 +295,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             priceChCanceled.add(key);
                         }
                     }
-                    /**END Saving/retrieving items***/
+                    /**END saving/retrieving items***/
                     priceChopperRequest.clear();
                     buildList();
                     if(!priceChCanceled.isEmpty()){
                         printCanceled2Stores("P. CHPR EXCLUSIVE",priceChCanceled);
                     }
                 } else {
-                    /**START Saving/retrieving items**/
+                    /**START saving/retrieving items**/
                     for (Map.Entry<String, Double> entry : costcoRequest.entrySet()) {
                         String key = entry.getKey();
                         if(shawsInventory.containsKey(key)){
@@ -287,7 +313,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                             costcoCanceled.add(key);
                         }
                     }
-                    /**END Saving/retrieving items***/
+                    /**END saving/retrieving items***/
                     costcoRequest.clear();
                     buildList();
                     if(!costcoCanceled.isEmpty()){
@@ -296,13 +322,18 @@ public class StoreResultsActivity extends AppCompatActivity {
                 }
             }
         }
+
+        //If 1-store is selected build for 1-store
         if (oneStore.isChecked()) {
+
             dualCanceledStores.clear();
+
             Toast.makeText(this, "One store list selected", Toast.LENGTH_SHORT).show();
+
+            //Phase-1 flush and drop according to individual subTotals if # of items is equal in all 3-stores
             if (shawsSize == priceChSize && priceChSize == costcoSize) {
-                //based on individual subtotal
                 if (shawsSTotal > priceChSTotal && shawsSTotal > costcoSTotal) {
-                    //START Saving/retrieving items
+                    /**START saving/retrieving items***/
                     dualCanceledStores.putAll(priceChopperRequest);
                     dualCanceledStores.putAll(costcoRequest);
                     for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
@@ -317,14 +348,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             dualCanceledStores.remove(key);
                         }
                     }
-                    //END Saving/retrieving items
+                    /**END saving/retrieving items***/
                     priceChopperRequest.clear();
                     costcoRequest.clear();
                     buildList();
                      if(!dualCanceledStores.isEmpty()){
                         printCanceled1Store("P. CHPR & COSTCO EXCLUSIVE",dualCanceledStores);
                     }                } else if (priceChSTotal > costcoSTotal) {
-                    //START Saving/retrieving items
+                    /**START saving/retrieving items***/
                     dualCanceledStores.putAll(shawsRequest);
                     dualCanceledStores.putAll(costcoRequest);
                     for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
@@ -339,14 +370,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             dualCanceledStores.remove(key );
                         }
                     }
-                    //END Saving/retrieving items
+                    /**END saving/retrieving items***/
                     costcoRequest.clear();
                     shawsRequest.clear();
                     buildList();
                      if(!dualCanceledStores.isEmpty()){
                         printCanceled1Store("COSTCO & SHAWS EXCLUSIVE",dualCanceledStores);
                     }                } else {
-                    //START Saving/retrieving items
+                    /**START saving/retrieving items***/
                     dualCanceledStores.putAll(priceChopperRequest);
                     dualCanceledStores.putAll(shawsRequest);
                     for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
@@ -361,7 +392,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                             dualCanceledStores.remove(key );
                         }
                     }
-                    //END Saving/retrieving items
+                    /**END saving/retrieving items***/
                     priceChopperRequest.clear();
                     shawsRequest.clear();
                     buildList();
@@ -369,9 +400,9 @@ public class StoreResultsActivity extends AppCompatActivity {
                         printCanceled1Store("P. CHPR & SHAWS EXCLUSIVE",dualCanceledStores);
                     }                }
             } else {
-                //based on # of items
+                //Phase-2 flush and drop according to # of items among the stores
                 if (shawsSize > priceChSize && shawsSize > costcoSize) {
-                    //START Saving/retrieving items
+                    /**START saving/retrieving items***/
                     dualCanceledStores.putAll(priceChopperRequest);
                     dualCanceledStores.putAll(costcoRequest);
                     for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
@@ -386,14 +417,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             dualCanceledStores.remove(key );
                         }
                     }
-                    //END Saving/retrieving items
+                    /**END saving/retrieving items***/
                     priceChopperRequest.clear();
                     costcoRequest.clear();
                     buildList();
                      if(!dualCanceledStores.isEmpty()){
                         printCanceled1Store("P. CHPR & COSTCO EXCLUSIVE",dualCanceledStores);
                     }                } else if (priceChSize > costcoSize) {
-                    //START Saving/retrieving items
+                    /**START saving/retrieving items***/
                     dualCanceledStores.putAll(shawsRequest);
                     dualCanceledStores.putAll(costcoRequest);
                     for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
@@ -408,14 +439,14 @@ public class StoreResultsActivity extends AppCompatActivity {
                             dualCanceledStores.remove(key );
                         }
                     }
-                    //END Saving/retrieving items
+                    /**END saving/retrieving items***/
                     costcoRequest.clear();
                     shawsRequest.clear();
                     buildList();
                      if(!dualCanceledStores.isEmpty()){
                         printCanceled1Store("COSTCO & SHAWS EXCLUSIVE",dualCanceledStores);
                     }                } else {
-                    //START Saving/retrieving items
+                    /**START saving/retrieving items***/
                     dualCanceledStores.putAll(priceChopperRequest);
                     dualCanceledStores.putAll(shawsRequest);
                     for (Map.Entry<String, Double> entry : dualCanceledStores.entrySet()) {
@@ -430,7 +461,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                             dualCanceledStores.remove(key );
                         }
                     }
-                    //END Saving/retrieving items
+                    /**END saving/retrieving items***/
                     priceChopperRequest.clear();
                     shawsRequest.clear();
                     buildList();
@@ -444,7 +475,13 @@ public class StoreResultsActivity extends AppCompatActivity {
         prepare2();
     }
 
+    /**
+     * Function for building the UI for exclusive items when 1-store is selected
+     * @param s Names of the dropped stores
+     * @param h HashMap -> dualCanceledStores
+     */
     private void printCanceled1Store(String s, HashMap<String, Double> h){
+
         TableRow space = new TableRow(this.getApplicationContext());
         TextView sp = new TextView(this.getApplicationContext());
         sp.setText("SPACE");
@@ -453,6 +490,7 @@ public class StoreResultsActivity extends AppCompatActivity {
         table.addView(space);
         TableRow row = new TableRow(this.getApplicationContext());
         TextView viewX = new TextView(this.getApplicationContext());
+        //Credit -> stackoverflow.com/questions/21004595/changing-android-tablelayout-column-span
         TableRow.LayoutParams params = new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
@@ -475,7 +513,13 @@ public class StoreResultsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Function for building the UI for exclusive items when 2-stores is selected
+     * @param s Name of dropped store
+     * @param l Canceled(store) Array of items for the dropped store
+     */
     private void printCanceled2Stores(String s, List<String> l){
+
         TableRow space = new TableRow(this.getApplicationContext());
         TextView sp = new TextView(this.getApplicationContext());
         sp.setText("SPACE");
@@ -504,9 +548,13 @@ public class StoreResultsActivity extends AppCompatActivity {
            }
     }
 
+    /**
+     * Function to build the UI using the subList() function below
+     */
     private void buildList() {
-        //TableLayout table = findViewById(R.id.table);
+
         table.removeAllViews();
+
         if (!shawsRequest.isEmpty()) {
             subList(shawsRequest, table, "SHAWS");
             TableRow space = new TableRow(this.getApplicationContext());
@@ -517,7 +565,6 @@ public class StoreResultsActivity extends AppCompatActivity {
             table.addView(space);
         }
         if (!priceChopperRequest.isEmpty()) {
-
             subList(priceChopperRequest, table, "P. CHPR");
             TableRow space = new TableRow(this.getApplicationContext());
             TextView s = new TextView(this.getApplicationContext());
@@ -535,9 +582,8 @@ public class StoreResultsActivity extends AppCompatActivity {
             space.addView(s);
             table.addView(space);
         }
-        //This is the non exist items display
+        //This is the non exist items UI part
         if (!notExistItems.isEmpty()) {
-
             TableRow row = new TableRow(this.getApplicationContext());
             row.addView(makeTV("N/A"));
             table.addView(row);
@@ -576,10 +622,16 @@ public class StoreResultsActivity extends AppCompatActivity {
                 table.addView(rowNA);
             }
         }
+        //Credit -> stackoverflow.com/questions/5033404/how-to-use-javas-decimalformat-for-smart-currency-formatting
         DecimalFormat currency = new DecimalFormat("'$'0.00");
         g.setText("GRAND TOTAL: " + currency.format(Math.round(grandT * 100.0) / 100.0));
     }
 
+    /**
+     * Function to create view used for the headers in the UI
+     * @param word -> the input
+     * @return -> TextView with that word
+     */
     private TextView makeTV(String word) {
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
@@ -588,6 +640,11 @@ public class StoreResultsActivity extends AppCompatActivity {
         return view;
     }
 
+    /**
+     * Function to create view used for the data in the UI
+     * @param word -> the input
+     * @return -> TextView with that word
+     */
     private TextView makeTV2(String word) {
         TextView view = new TextView(this.getApplicationContext());
         view.setText(word);
@@ -596,7 +653,14 @@ public class StoreResultsActivity extends AppCompatActivity {
         return view;
     }
 
+    /**
+     * Function to build the UI components
+     * @param sub -> store needed to build its list UI
+     * @param tab -> table
+     * @param str -> designated name of store(s)
+     */
     private void subList(HashMap<String, Double> sub, TableLayout tab, String str) {
+
         double total = 0;
         TableRow firstRow = new TableRow(this.getApplicationContext());
         firstRow.addView(makeTV(str));
@@ -640,6 +704,11 @@ public class StoreResultsActivity extends AppCompatActivity {
         tab.addView(rowT);
     }
 
+    /**
+     * Function to calculate individual stores subtotal
+     * @param sub -> needed store list
+     * @return -> double value (total) of the store's subtotal
+     */
     private double subTotal(HashMap<String, Double> sub) {
         double total = 0.0;
         for (Map.Entry<String, Double> entry : sub.entrySet()) {

@@ -20,17 +20,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-
 import com.example.sublistsbystore.item.Item;
 import com.example.sublistsbystore.item.ItemDAO;
 import com.example.sublistsbystore.requestedItem.RequestedItem;
 import com.example.sublistsbystore.requestedItem.RequestedItemDAO;
 import com.example.sublistsbystore.retailitem.RetailItem;
 import com.example.sublistsbystore.retailitem.RetailItemDAO;
-import com.example.sublistsbystore.store.StoreDAO;
 
 import java.util.List;
 
@@ -40,7 +37,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 public class MainActivity extends AppCompatActivity {
     RequestedItemDAO requestedItemDAO;
     ItemDAO itemDAO;
-    StoreDAO storeDAO;
     RetailItemDAO retailItemDAO;
     ShoparoundDB db;
     float scale;
