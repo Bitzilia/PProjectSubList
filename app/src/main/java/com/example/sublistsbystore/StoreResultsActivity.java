@@ -588,10 +588,10 @@ public class StoreResultsActivity extends AppCompatActivity {
             row.addView(makeTV("N/A"));
             table.addView(row);
             TableRow secondRow = new TableRow(this.getApplicationContext());
-            secondRow.addView(makeTV(" CHK "));
+            secondRow.addView(makeTV("IN-CART        "));
             secondRow.addView(makeTV(" NAME       "));
             secondRow.addView(makeTV("             "));
-            secondRow.addView(makeTV("    QTY "));
+            secondRow.addView(makeTV("   QTY "));
             table.addView(secondRow);
             for (int i = 0; i < notExistItems.size(); i++) {
                 int quantity = StaticData.nameQuantityFrmDB.get(notExistItems.get(i));
@@ -609,7 +609,7 @@ public class StoreResultsActivity extends AppCompatActivity {
                 viewX.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.table_text_size2));
                 viewX.setLayoutParams(params);
                 rowNA.addView(viewX, params);
-                rowNA.addView(makeTV2("        " + quantity));
+                rowNA.addView(makeTV2("      " + quantity));
                 box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked){
@@ -666,10 +666,10 @@ public class StoreResultsActivity extends AppCompatActivity {
         firstRow.addView(makeTV(str));
         tab.addView(firstRow);
         TableRow secondRow = new TableRow(this.getApplicationContext());
-        secondRow.addView(makeTV(" CHK "));
+        secondRow.addView(makeTV("IN-CART        "));
         secondRow.addView(makeTV(" NAME       "));
         secondRow.addView(makeTV(" PRICE       "));
-        secondRow.addView(makeTV("    QTY "));
+        secondRow.addView(makeTV("   QTY "));
         tab.addView(secondRow);
         for (Map.Entry<String, Double> entry : sub.entrySet()) {
             String key = entry.getKey();
@@ -684,7 +684,7 @@ public class StoreResultsActivity extends AppCompatActivity {
             row.addView(makeTV2("  " + key));
             DecimalFormat currency = new DecimalFormat("'$'0.00");
             row.addView(makeTV2("  "+currency.format(Math.round(value * 100.0) / 100.0)));
-            row.addView(makeTV2("        " + quantity));
+            row.addView(makeTV2("      " + quantity));
             box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
